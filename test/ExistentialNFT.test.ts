@@ -45,15 +45,6 @@ describe("ExistentialNFT", () => {
     );
   });
 
-  describe("mint", () => {
-    it("should not allow the NFT to be minted", async () => {
-      await expect(enft.mint(subscriber.address)).to.be.revertedWithCustomError(
-        enft,
-        "ExistentialNFT_MintingIsNotAllowed"
-      );
-    });
-  });
-
   describe("balanceOf", () => {
     it("should return 0 when the flow is non existant", async () => {
       const balance = await enft.balanceOf(subscriber.address);

@@ -31,10 +31,6 @@ contract ExistentialNFT is ERC721 {
         singletonTokenURI = _singletonTokenURI;
     }
 
-    function mint(address) public pure {
-        revert ExistentialNFT_MintingIsNotAllowed();
-    }
-
     function balanceOf(address owner) public view override returns (uint256) {
         int96 flowRate = incomingFlowToken.getFlowRate(owner, recipient);
 
