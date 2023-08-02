@@ -1,0 +1,12 @@
+export const MONTHS_PER_YEAR = 12;
+export const DAYS_PER_MONTH = 30;
+export const DAYS_PER_WEEK = 7;
+export const HOURS_PER_DAY = 24;
+export const MINUTES_PER_HOUR = 60;
+export const MINUTE_IN_SECONDS = 60;
+export const HOUR_IN_SECONDS = MINUTE_IN_SECONDS * MINUTES_PER_HOUR;
+export const DAY_IN_SECONDS = HOUR_IN_SECONDS * HOURS_PER_DAY;
+export const WEEK_IN_SECONDS = DAY_IN_SECONDS * DAYS_PER_WEEK;
+export const MONTH_IN_SECONDS = DAY_IN_SECONDS * DAYS_PER_MONTH;
+export const YEAR_IN_SECONDS = MONTH_IN_SECONDS * MONTHS_PER_YEAR;
+export const BASE_18 = 1e18;
