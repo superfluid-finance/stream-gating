@@ -91,14 +91,7 @@ contract ExistentialNFT is ERC721 {
 
     function getPaymentOptionFor(
         address owner
-    ) public view returns (PaymentOption memory) {
-        PaymentOption memory result = PaymentOption(
-            ISuperToken(address(0)),
-            address(0),
-            0,
-            ""
-        );
-
+    ) public view returns (PaymentOption memory result) {
         for (uint256 i = 0; i < paymentOptions.length; i++) {
             PaymentOption memory paymentOption = paymentOptions[i];
             int96 flowRate = paymentOption.incomingFlowToken.getFlowRate(
@@ -110,7 +103,5 @@ contract ExistentialNFT is ERC721 {
                 result = paymentOption;
             }
         }
-
-        return result;
     }
 }
