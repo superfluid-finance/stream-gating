@@ -5,6 +5,7 @@ pragma solidity ^0.8.19;
 import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {ISuperToken} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperToken.sol";
 import {SuperTokenV1Library} from "@superfluid-finance/ethereum-contracts/contracts/apps/SuperTokenV1Library.sol";
+import "hardhat/console.sol";
 
 error ExistentialNFT_TransferIsNotAllowed();
 
@@ -39,7 +40,7 @@ contract ExistentialNFT is ERC721 {
     }
 
     function balanceOf(address owner) public view override returns (uint256) {
-        PaymentOption memory paymentOption = matchPaymentOptionFor(owner);
+        PaymentOption memory paymentOption = getPaymentOptionFor(owner);
 
         return paymentOption.requiredFlowRate > 0 ? 1 : 0;
     }
@@ -53,7 +54,7 @@ contract ExistentialNFT is ERC721 {
             return "";
         }
 
-        PaymentOption memory paymentOption = matchPaymentOptionFor(owner);
+        PaymentOption memory paymentOption = getPaymentOptionFor(owner);
 
         return paymentOption.optionTokenURI;
     }
@@ -89,9 +90,9 @@ contract ExistentialNFT is ERC721 {
         return paymentOptions;
     }
 
-    function matchPaymentOptionFor(
+    function getPaymentOptionFor(
         address owner
-    ) internal view returns (PaymentOption memory) {
+    ) public view returns (PaymentOption memory) {
         PaymentOption memory result = PaymentOption(
             ISuperToken(address(0)),
             address(0),

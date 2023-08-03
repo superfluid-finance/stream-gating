@@ -64,6 +64,58 @@ describe("ExistentialNFT", () => {
     });
   });
 
+  describe("getPaymentOptionFor", () => {
+    it("should return empty paymentOption if there is no stream.", async () => {
+      const paymentOption = await enft.getPaymentOptionFor(subscriber.address);
+
+      expect(paymentOption).to.deep.equal([ZeroAddress, ZeroAddress, 0n, ""]);
+    });
+
+    it("should return the appropriate paymentOption according to flowRate(86400)", async () => {
+      await mintWrapperSuperToken(config.superTokens[0], subscriber); // mint 100 fUSDCx
+      expect(await superToken.balanceOf(subscriber.address)).to.eq(
+        parseEther("100")
+      );
+
+      const tx = await cfaV1Forwarder.createFlow(
+        config.superTokens[0].address,
+        subscriber.address,
+        config.recipients[0],
+        config.requiredFlowRates[0],
+        "0x"
+      );
+
+      await tx.wait();
+
+      const paymentOption = await enft.getPaymentOptionFor(subscriber.address);
+
+      // flowRate is 86400
+      expect(paymentOption[2]).to.equal(86400n);
+    });
+
+    it("should return the appropriate paymentOption according to flowRate(172800)", async () => {
+      await mintWrapperSuperToken(config.superTokens[0], subscriber); // mint 100 fUSDCx
+      expect(await superToken.balanceOf(subscriber.address)).to.eq(
+        parseEther("100")
+      );
+
+      const tx = await cfaV1Forwarder.createFlow(
+        config.superTokens[1].address,
+        subscriber.address,
+        config.recipients[1],
+        config.requiredFlowRates[1],
+        "0x"
+      );
+
+      await tx.wait();
+
+      const paymentOption = await enft.getPaymentOptionFor(subscriber.address);
+
+      // flowRate is 172800
+      expect(paymentOption[2]).to.equal(172800n);
+    });
+  });
+
   describe("balanceOf", () => {
     it("should return 0 when the flow is non existant", async () => {
       const balance = await enft.balanceOf(subscriber.address);
@@ -79,7 +131,7 @@ describe("ExistentialNFT", () => {
       const tx = await cfaV1Forwarder.createFlow(
         config.superTokens[0].address,
         subscriber.address,
-        deployer.address,
+        config.recipients[0],
         config.requiredFlowRates[0] - 1n,
         "0x"
       );
@@ -89,7 +141,7 @@ describe("ExistentialNFT", () => {
       const [_, flowRate] = await cfaV1Forwarder.getFlowInfo(
         config.superTokens[0].address,
         subscriber.address,
-        deployer.address
+        config.recipients[0]
       );
 
       expect(flowRate).to.eq(86399n);
@@ -108,7 +160,7 @@ describe("ExistentialNFT", () => {
       const tx = await cfaV1Forwarder.createFlow(
         config.superTokens[0].address,
         subscriber.address,
-        deployer.address,
+        config.recipients[0],
         config.requiredFlowRates[0] + 1n,
         "0x"
       );
@@ -118,7 +170,7 @@ describe("ExistentialNFT", () => {
       const [_, flowRate] = await cfaV1Forwarder.getFlowInfo(
         config.superTokens[0].address,
         subscriber.address,
-        deployer.address
+        config.recipients[0]
       );
 
       expect(flowRate).to.eq(86401n);
@@ -138,7 +190,7 @@ describe("ExistentialNFT", () => {
       const tx = await cfaV1Forwarder.createFlow(
         config.superTokens[0].address,
         subscriber.address,
-        deployer.address,
+        config.recipients[0],
         config.requiredFlowRates[0].toString(),
         "0x"
       );
@@ -148,7 +200,7 @@ describe("ExistentialNFT", () => {
       const [_, flowRate] = await cfaV1Forwarder.getFlowInfo(
         config.superTokens[0].address,
         subscriber.address,
-        deployer.address
+        config.recipients[0]
       );
 
       expect(flowRate).to.eq(config.requiredFlowRates[0]);
@@ -176,7 +228,7 @@ describe("ExistentialNFT", () => {
       const tx = await cfaV1Forwarder.createFlow(
         config.superTokens[0].address,
         subscriber.address,
-        deployer.address,
+        config.recipients[0],
         config.requiredFlowRates[0].toString(),
         "0x"
       );
@@ -206,7 +258,7 @@ describe("ExistentialNFT", () => {
       const tx = await cfaV1Forwarder.createFlow(
         config.superTokens[0].address,
         subscriber.address,
-        deployer.address,
+        config.recipients[0],
         config.requiredFlowRates[0].toString(),
         "0x"
       );
