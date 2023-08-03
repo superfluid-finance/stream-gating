@@ -20,7 +20,7 @@ contract ExistentialNFT is ERC721 {
 
     PaymentOption[] private paymentOptions;
 
-    gtructor(
+    constructor(
         ISuperToken[] memory incomingFlowTokens,
         address[] memory recipients,
         int96[] memory requiredFlowRates,
