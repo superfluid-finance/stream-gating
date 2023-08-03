@@ -9,45 +9,64 @@ import {SuperTokenV1Library} from "@superfluid-finance/ethereum-contracts/contra
 error ExistentialNFT_TransferIsNotAllowed();
 error ExistentialNFT_MintingIsNotAllowed();
 
+struct PaymentOption {
+    ISuperToken incomingFlowToken;
+    address recipient;
+    int96 requiredFlowRate;
+    string optionTokenURI;
+}
+
 contract ExistentialNFT is ERC721 {
     using SuperTokenV1Library for ISuperToken;
 
-    ISuperToken private immutable incomingFlowToken;
-    address private immutable recipient;
-    int96 private immutable requiredFlowRate;
-
-    string private singletonTokenURI;
+    PaymentOption[] private paymentOptions;
 
     constructor(
-        ISuperToken _incomingFlowToken,
-        address _recipient,
-        int96 _requiredFlowRate,
-        string memory _singletonTokenURI
+        ISuperToken[] memory incomingFlowTokens,
+        address[] memory recipients,
+        int96[] memory requiredFlowRates,
+        string[] memory optionTokenURIs
     ) ERC721("Superfluid Existential NFT", "SFENFT") {
-        incomingFlowToken = _incomingFlowToken;
-        recipient = _recipient;
-        requiredFlowRate = _requiredFlowRate;
-
-        singletonTokenURI = _singletonTokenURI;
+        for (uint256 i = 0; i < incomingFlowTokens.length; i++) {
+            paymentOptions.push(
+                PaymentOption(
+                    incomingFlowTokens[i],
+                    recipients[i],
+                    requiredFlowRates[i],
+                    optionTokenURIs[i]
+                )
+            );
+        }
     }
 
     function balanceOf(address owner) public view override returns (uint256) {
-        int96 flowRate = incomingFlowToken.getFlowRate(owner, recipient);
+        PaymentOption memory paymentOption = matchPaymentOptionFor(owner);
 
-        // TODO: <= vs !=
-        if (flowRate != requiredFlowRate) {
-            return 0;
+        return paymentOption.requiredFlowRate > 0 ? 1 : 0;
+    }
+
+    function tokenURI(
+        uint256 tokenId
+    ) public view override returns (string memory) {
+        address owner = address(uint160(tokenId));
+
+        if (balanceOf(owner) == 0) {
+            return "";
         }
 
-        return 1;
+        PaymentOption memory paymentOption = matchPaymentOptionFor(owner);
+
+        return paymentOption.optionTokenURI;
     }
 
-    function tokenURI(uint256) public view override returns (string memory) {
-        return singletonTokenURI;
-    }
+    function ownerOf(uint256 tokenId) public view override returns (address) {
+        address owner = address(uint160(tokenId));
 
-    function ownerOf(uint256 tokenId) public pure override returns (address) {
-        return address(uint160(tokenId));
+        if (balanceOf(owner) == 1) {
+            return owner;
+        }
+
+        return address(0);
     }
 
     function transferFrom(address, address, uint256) public pure override {
@@ -65,5 +84,34 @@ contract ExistentialNFT is ERC721 {
         bytes memory
     ) public pure override {
         revert ExistentialNFT_TransferIsNotAllowed();
+    }
+
+    function getPaymentOptions() public view returns (PaymentOption[] memory) {
+        return paymentOptions;
+    }
+
+    function matchPaymentOptionFor(
+        address owner
+    ) internal view returns (PaymentOption memory) {
+        PaymentOption memory result = PaymentOption(
+            ISuperToken(address(0)),
+            address(0),
+            0,
+            ""
+        );
+
+        for (uint256 i = 0; i < paymentOptions.length; i++) {
+            PaymentOption memory paymentOption = paymentOptions[i];
+            int96 flowRate = paymentOption.incomingFlowToken.getFlowRate(
+                owner,
+                paymentOption.recipient
+            );
+
+            if (paymentOption.requiredFlowRate <= flowRate && flowRate != 0) {
+                result = paymentOption;
+            }
+        }
+
+        return result;
     }
 }

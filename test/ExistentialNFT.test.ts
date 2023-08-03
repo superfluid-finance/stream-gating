@@ -9,11 +9,10 @@ import networks, { NetworkConfig } from "../helper-hardhat.config";
 import { deployments, ethers, network } from "hardhat";
 import { expect } from "chai";
 
-import { AddressLike, ZeroAddress, parseEther } from "ethers";
+import { ZeroAddress, parseEther } from "ethers";
 import { CFAv1Forwarder__factory } from "../typechain-types/factories/@superfluid-finance/ethereum-contracts/contracts/utils";
 import { CFAv1Forwarder } from "../typechain-types/@superfluid-finance/ethereum-contracts/contracts/utils";
 import { mintWrapperSuperToken } from "../utils/mint-supertoken";
-import { Address } from "hardhat-deploy/types";
 
 describe("ExistentialNFT", () => {
   let accounts: SignerWithAddress[],
@@ -40,9 +39,29 @@ describe("ExistentialNFT", () => {
 
     enft = ExistentialNFT__factory.connect(enftContract.address, deployer);
     superToken = ISuperToken__factory.connect(
-      config.superToken.address,
+      config.superTokens[0].address,
       subscriber
     );
+  });
+
+  describe("getPaymentOptions", () => {
+    it("should return all paymentOptions configured in the contract", async () => {
+      const [paymentOption1, paymentOption2] = await enft.getPaymentOptions();
+
+      expect(paymentOption1).to.deep.equal([
+        "0x42bb40bF79730451B11f6De1CbA222F17b87Afd7",
+        "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+        86400n,
+        "https://ipfs.io/someIPFSHash",
+      ]);
+
+      expect(paymentOption2).to.deep.equal([
+        "0x42bb40bF79730451B11f6De1CbA222F17b87Afd7",
+        "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+        172800n,
+        "https://ipfs.io/someOtherIPFSHash",
+      ]);
+    });
   });
 
   describe("balanceOf", () => {
@@ -51,59 +70,88 @@ describe("ExistentialNFT", () => {
       expect(balance).to.equal(0);
     });
 
-    it("should return 0 if the flowRate is different that what's specified in requiredFlowRate", async () => {
-      await mintWrapperSuperToken(config.superToken, subscriber); // mint 100 fUSDCx
+    it("should return 0 if the flowRate is less that what's specified in requiredFlowRate", async () => {
+      await mintWrapperSuperToken(config.superTokens[0], subscriber); // mint 100 fUSDCx
       expect(await superToken.balanceOf(subscriber.address)).to.eq(
         parseEther("100")
       );
 
       const tx = await cfaV1Forwarder.createFlow(
-        config.superToken.address,
+        config.superTokens[0].address,
         subscriber.address,
         deployer.address,
-        BigInt(100),
+        config.requiredFlowRates[0] - 1n,
         "0x"
       );
 
       await tx.wait();
 
       const [_, flowRate] = await cfaV1Forwarder.getFlowInfo(
-        config.superToken.address,
+        config.superTokens[0].address,
         subscriber.address,
         deployer.address
       );
 
-      expect(flowRate).to.eq(BigInt(100));
+      expect(flowRate).to.eq(86399n);
 
       const balance = await enft.balanceOf(subscriber.address);
 
       expect(balance).to.equal(0);
     });
 
-    it("should return 1 if the flowRate matches what's specified in requiredFlowRate", async () => {
-      await mintWrapperSuperToken(config.superToken, subscriber); // mint 100 fUSDCx
-
+    it("should return 1 if the flowRate is greater than what's specified in requiredFlowRate", async () => {
+      await mintWrapperSuperToken(config.superTokens[0], subscriber); // mint 100 fUSDCx
       expect(await superToken.balanceOf(subscriber.address)).to.eq(
         parseEther("100")
       );
 
       const tx = await cfaV1Forwarder.createFlow(
-        config.superToken.address,
+        config.superTokens[0].address,
         subscriber.address,
         deployer.address,
-        config.requiredFlowRate.toString(),
+        config.requiredFlowRates[0] + 1n,
         "0x"
       );
 
       await tx.wait();
 
       const [_, flowRate] = await cfaV1Forwarder.getFlowInfo(
-        config.superToken.address,
+        config.superTokens[0].address,
         subscriber.address,
         deployer.address
       );
 
-      expect(flowRate).to.eq(config.requiredFlowRate);
+      expect(flowRate).to.eq(86401n);
+
+      const balance = await enft.balanceOf(subscriber.address);
+
+      expect(balance).to.equal(1);
+    });
+
+    it("should return 1 if the flowRate matches what's specified in requiredFlowRate", async () => {
+      await mintWrapperSuperToken(config.superTokens[0], subscriber); // mint 100 fUSDCx
+
+      expect(await superToken.balanceOf(subscriber.address)).to.eq(
+        parseEther("100")
+      );
+
+      const tx = await cfaV1Forwarder.createFlow(
+        config.superTokens[0].address,
+        subscriber.address,
+        deployer.address,
+        config.requiredFlowRates[0].toString(),
+        "0x"
+      );
+
+      await tx.wait();
+
+      const [_, flowRate] = await cfaV1Forwarder.getFlowInfo(
+        config.superTokens[0].address,
+        subscriber.address,
+        deployer.address
+      );
+
+      expect(flowRate).to.eq(config.requiredFlowRates[0]);
 
       const balance = await enft.balanceOf(subscriber.address);
 
@@ -112,13 +160,29 @@ describe("ExistentialNFT", () => {
   });
 
   describe("ownerOf", () => {
-    it("should return the tokenId converted to an address", async () => {
+    it("should return zeroAddress on arbitrary tokenId", async () => {
       const owner = await enft.ownerOf(1);
 
-      expect(owner).to.equal(BigInt(ZeroAddress) + BigInt(1));
+      expect(owner).to.equal(BigInt(ZeroAddress));
     });
 
     it("should return the correct owner", async () => {
+      await mintWrapperSuperToken(config.superTokens[0], subscriber); // mint 100 fUSDCx
+
+      expect(await superToken.balanceOf(subscriber.address)).to.eq(
+        parseEther("100")
+      );
+
+      const tx = await cfaV1Forwarder.createFlow(
+        config.superTokens[0].address,
+        subscriber.address,
+        deployer.address,
+        config.requiredFlowRates[0].toString(),
+        "0x"
+      );
+
+      await tx.wait();
+
       const owner = await enft.ownerOf(subscriber.address);
 
       expect(owner).to.equal(subscriber.address);
@@ -126,13 +190,32 @@ describe("ExistentialNFT", () => {
   });
 
   describe("tokenURI", () => {
-    it("should return a single tokenURI, disregarding the passed tokenId", async () => {
+    it("should return empty string if there is no stream.", async () => {
       const token1 = await enft.tokenURI(1);
-      const token2 = await enft.tokenURI(2);
 
-      expect(token1).to.equal(token2);
-      expect(token1).to.equal(config.singletonTokenURI);
-      expect(token2).to.equal(config.singletonTokenURI);
+      expect(token1).to.equal("");
+    });
+
+    it("should return the appropriate paymentOptions url, when there's an existing stream.", async () => {
+      await mintWrapperSuperToken(config.superTokens[0], subscriber); // mint 100 fUSDCx
+
+      expect(await superToken.balanceOf(subscriber.address)).to.eq(
+        parseEther("100")
+      );
+
+      const tx = await cfaV1Forwarder.createFlow(
+        config.superTokens[0].address,
+        subscriber.address,
+        deployer.address,
+        config.requiredFlowRates[0].toString(),
+        "0x"
+      );
+
+      await tx.wait();
+
+      const tokenURI = await enft.tokenURI(subscriber.address);
+
+      expect(tokenURI).to.equal(config.optionTokenURIs[0]);
     });
   });
 

@@ -13,33 +13,39 @@ const polygonMumbai = metaData.getNetworkByChainId(80001)!;
 
 export type NetworkConfig = {
   name: NetworkName;
-  totalSupply: number;
-  superToken: SuperTokenInfo;
+  superTokens: SuperTokenInfo[];
   hostAddress: Address;
   cfaV1ForwarderAddress: Address;
-  recipient: Address;
-  requiredFlowRate: BigInt;
-  singletonTokenURI: string;
+  recipients: Address[];
+  requiredFlowRates: bigint[];
+  optionTokenURIs: string[];
 };
 
 const polygonMumbaiConfig: NetworkConfig = {
-  name: "polygon",
-  totalSupply: 0,
-  superToken: fUSDCx,
+  name: "polygonMumbai",
+  superTokens: [fUSDCx, fUSDCx],
   hostAddress: polygonMumbai.contractsV1.host as Address,
   cfaV1ForwarderAddress: polygonMumbai.contractsV1.cfaV1Forwarder as Address,
-  recipient: "0x",
-  requiredFlowRate: BigInt(0),
-  singletonTokenURI: "",
+  recipients: ["0x"],
+  requiredFlowRates: [BigInt(0)],
+  optionTokenURIs: [""],
 };
 
 const hardhatConfig: NetworkConfig = {
   ...polygonMumbaiConfig,
   name: "hardhat",
-  totalSupply: 1,
-  recipient: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-  requiredFlowRate: BigInt(Math.floor(MONTH_IN_SECONDS / 30)),
-  singletonTokenURI: "https://ipfs.io/someIPFSHash",
+  recipients: [
+    "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+    "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+  ],
+  requiredFlowRates: [
+    BigInt(Math.floor(MONTH_IN_SECONDS / 30)),
+    2n * BigInt(Math.floor(MONTH_IN_SECONDS / 30)),
+  ],
+  optionTokenURIs: [
+    "https://ipfs.io/someIPFSHash",
+    "https://ipfs.io/someOtherIPFSHash",
+  ],
 };
 
 const networks: Record<number, NetworkConfig> = {

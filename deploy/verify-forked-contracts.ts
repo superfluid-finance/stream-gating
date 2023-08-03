@@ -17,7 +17,10 @@ const verifyContracts: DeployFunction = async function (
   const config = networkConfig[network.config.chainId!];
 
   const contractData = [
-    { name: "superToken", address: config.superToken.address },
+    ...config.superTokens.map((superToken) => ({
+      name: superToken.name,
+      address: superToken.address,
+    })),
     { name: "host", address: config.hostAddress },
     { name: "cfaV1Forwarder", address: config.cfaV1ForwarderAddress },
   ];
@@ -40,7 +43,7 @@ const verifyContracts: DeployFunction = async function (
         console.log(`✅ Contract found at ${address}, with name: ${name}`);
       } else {
         console.error(
-          `❌ Contract not found at ${config.superToken.address}, with name: ${name}`
+          `❌ Contract not found at ${config.superTokens[0].address}, with name: ${name}`
         );
       }
     });

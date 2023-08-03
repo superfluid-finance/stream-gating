@@ -15,10 +15,10 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const config = networkConfig[network.config.chainId!];
 
   const args: any = [
-    config.superToken.address,
-    config.recipient,
-    config.requiredFlowRate,
-    config.singletonTokenURI,
+    config.superTokens.map(({ address }) => address),
+    config.recipients,
+    config.requiredFlowRates,
+    config.optionTokenURIs,
   ];
 
   const existentialNFT = await deploy(CONTRACT_NAME, {
