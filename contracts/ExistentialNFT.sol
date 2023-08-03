@@ -7,7 +7,6 @@ import {ISuperToken} from "@superfluid-finance/ethereum-contracts/contracts/inte
 import {SuperTokenV1Library} from "@superfluid-finance/ethereum-contracts/contracts/apps/SuperTokenV1Library.sol";
 
 error ExistentialNFT_TransferIsNotAllowed();
-error ExistentialNFT_MintingIsNotAllowed();
 
 struct PaymentOption {
     ISuperToken incomingFlowToken;

@@ -1,9 +1,8 @@
 import { DeployFunction } from "hardhat-deploy/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
-import networkConfig, { developmentChains } from "../helper-hardhat.config";
+import networkConfig from "../helper-hardhat.config";
 import { ethers } from "hardhat";
 import { ERC20WithTokenInfo__factory } from "../typechain-types";
-import hardhatUserConfig from "../hardhat.config";
 
 const verifyContracts: DeployFunction = async function (
   hre: HardhatRuntimeEnvironment
