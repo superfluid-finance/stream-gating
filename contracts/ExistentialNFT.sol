@@ -5,7 +5,6 @@ pragma solidity ^0.8.19;
 import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {ISuperToken} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperToken.sol";
 import {SuperTokenV1Library} from "@superfluid-finance/ethereum-contracts/contracts/apps/SuperTokenV1Library.sol";
-import "hardhat/console.sol";
 
 error ExistentialNFT_TransferIsNotAllowed();
 
@@ -21,7 +20,7 @@ contract ExistentialNFT is ERC721 {
 
     PaymentOption[] private paymentOptions;
 
-    constructor(
+    gtructor(
         ISuperToken[] memory incomingFlowTokens,
         address[] memory recipients,
         int96[] memory requiredFlowRates,
