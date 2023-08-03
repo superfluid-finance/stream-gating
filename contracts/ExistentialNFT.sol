@@ -48,24 +48,15 @@ contract ExistentialNFT is ERC721 {
         uint256 tokenId
     ) public view override returns (string memory) {
         address owner = address(uint160(tokenId));
-
-        if (balanceOf(owner) == 0) {
-            return "";
-        }
-
         PaymentOption memory paymentOption = getPaymentOptionFor(owner);
 
-        return paymentOption.optionTokenURI;
+        return balanceOf(owner) == 0 ? "" : paymentOption.optionTokenURI;
     }
 
     function ownerOf(uint256 tokenId) public view override returns (address) {
         address owner = address(uint160(tokenId));
 
-        if (balanceOf(owner) == 1) {
-            return owner;
-        }
-
-        return address(0);
+        return balanceOf(owner) == 1 ? owner : address(0);
     }
 
     function transferFrom(address, address, uint256) public pure override {
