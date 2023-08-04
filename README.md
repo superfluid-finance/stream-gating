@@ -33,6 +33,7 @@ The contract provides a novel way to control access to specific content or servi
 install dependencies first:
 ```shell
 yarn
+yarn compile #generate typechain files
 ```
 Then try running some of the following tasks:
 
@@ -43,4 +44,6 @@ yarn localnode
 ```
 
 The repository forks `Polygon Mumbai` making all Superfluid contracts available. Utilizing `hardhat-deploy`, the `deploy/00-enft.ts` file deploys the `ExistentialNFT` contract automatically, then the `deploy/verify-forked-contracts.ts` file automatically checks if all necessary contracts are available (only when running a local node). 
-The deployment configuration is found in `helper-hardhat.config.ts`.
+The deployment configuration is found in `helper-hardhat.config.ts`. 
+
+The `utils/mint-supertoken.ts` file contains `mintWrapperSupertoken(superToken, to)` which lets you mint some testnet fake Underlying Token, and wrap it into a Supertoken, making it possible to create streams easily. 
