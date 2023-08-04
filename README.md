@@ -23,15 +23,24 @@ The "ExistentialNFT" contract is an ERC-721 compliant Non-Fungible Token (NFT) c
 The contract provides a novel way to control access to specific content or services by tying token ownership to the existence of a stream with specific flow rates. As long as users maintain the required flow rates for their streams, they will continue to own the associated ExistentialNFT tokens and retain access to the gated services. If the stream is stopped or the flow rate drops below the required rate, ownership is lost, and access to the services is revoked.
 
 
-### Technologies / Development
+### Technologies
 
 - <b>Typescript<b>
 - <b>Hardhat</b>, <b>Hardhat Toolbox</b> and <b>Hardhat Deploy</b>
 - <b>Ethers v6</b>
 
-Try running some of the following tasks:
+### Development
+install dependencies first:
+```shell
+yarn
+```
+Then try running some of the following tasks:
 
 ```shell
 yarn test
+yarn coverage
 yarn localnode
 ```
+
+The repository forks `Polygon Mumbai` making all Superfluid contracts available. Utilizing `hardhat-deploy`, the `deploy/00-enft.ts` file deploys the `ExistentialNFT` contract automatically, then the `deploy/verify-forked-contracts.ts` file automatically checks if all necessary contracts are available (only when running a local node). 
+The deployment configuration is found in `helper-hardhat.config.ts`.
