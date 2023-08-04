@@ -2,7 +2,7 @@
 
 ##### The purpose of this repository provides stream gating solutions to <i>users</i> / <i>content-creators</i> / etc. of the `Superfluid` protocol.
 
-###Contracts:
+### Contracts:
  - <strong>ExistentialNFT</strong>
 
 The "ExistentialNFT" contract is an ERC-721 compliant Non-Fungible Token (NFT) contract that implements token gating based on the existence of a stream with a specific flow rate of a SuperToken. The contract implements the imitation of NFT behavior acting as binary switches, providing or revoking access to gated services or content, based on the balanceOf function.
