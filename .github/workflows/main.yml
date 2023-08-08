@@ -7,8 +7,6 @@ on:
   pull_request:
     branches:
       - "*"
-env:
-  POLYGON_MUMBAI_RPC_URL: ${{ vars.POLYGON_MUMBAI_RPC_URL }}
 
 concurrency:
   group: ${{github.workflow}}-${{github.ref}}
@@ -17,7 +15,7 @@ concurrency:
 jobs:
   test:
     env:
-      rpc: ${{ vars.POLYGON_MUMBAI_RPC_URL }}
+      rpc: https://rpc-endpoints.superfluid.dev/polygon-mumbai
     name: Test hardhat-mocha on Ubuntu with Node ${{ matrix.node }}
     runs-on: ubuntu-latest
     strategy:
@@ -35,4 +33,4 @@ jobs:
       - name: Run tests
         run: yarn test
         env: 
-          POLYGON_MUMBAI_RPC_URL: ${{env.rpc}}
+          POLYGON_MUMBAI_RPC_URL: ${{ env.rpc }}
