@@ -16,7 +16,7 @@ describe("ExistentialNFTClone", () => {
     const existentialNFTCloneAddress =
       process.env.EXISTENTIAL_NFT_CLONE_ADDRESS ?? "";
 
-g    enft = ExistentialNFT__factory.connect(
+    enft = ExistentialNFT__factory.connect(
       existentialNFTCloneAddress,
       deployer
     );
