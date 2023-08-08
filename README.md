@@ -1,4 +1,4 @@
-# Stream Gating [![cov](https://superfluid-finance.github.io/stream-gating/badges/coverage.svg)](https://github.com/superfluid-finance/stream-gating/actions)
+# Stream Gating
 
 ##### The purpose of this repository provides stream gating solutions to <i>users</i> / <i>content-creators</i> / etc. of the `Superfluid` protocol.
 
