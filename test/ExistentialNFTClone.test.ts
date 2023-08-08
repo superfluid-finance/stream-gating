@@ -1,12 +1,20 @@
 import { SignerWithAddress } from "@nomicfoundation/hardhat-ethers/signers";
-import { ExistentialNFT, ExistentialNFT__factory } from "../typechain-types";
-import { deployments, ethers } from "hardhat";
+import {
+  ExistentialNFT,
+  ExistentialNFTCloneFactory,
+  ExistentialNFTCloneFactory__factory,
+  ExistentialNFT__factory,
+} from "../typechain-types";
+import { deployments, ethers, network } from "hardhat";
 import { expect } from "chai";
+import networks, { NetworkConfig } from "../helper-hardhat.config";
 
 describe("ExistentialNFTClone", () => {
   let accounts: SignerWithAddress[],
     deployer: SignerWithAddress,
-    enft: ExistentialNFT;
+    enft: ExistentialNFT,
+    enftCloneFactory: ExistentialNFTCloneFactory,
+    config: NetworkConfig;
   beforeEach(async () => {
     accounts = await ethers.getSigners();
     [deployer] = accounts;
@@ -16,8 +24,19 @@ describe("ExistentialNFTClone", () => {
     const existentialNFTCloneAddress =
       process.env.EXISTENTIAL_NFT_CLONE_ADDRESS ?? "";
 
+    const existentialNFTDeployment = await deployments.get(
+      "ExistentialNFTCloneFactory"
+    );
+
+    config = networks[network.config.chainId!] as NetworkConfig;
+
     enft = ExistentialNFT__factory.connect(
       existentialNFTCloneAddress,
+      deployer
+    );
+
+    enftCloneFactory = ExistentialNFTCloneFactory__factory.connect(
+      existentialNFTDeployment.address,
       deployer
     );
   });
@@ -39,6 +58,33 @@ describe("ExistentialNFTClone", () => {
         172800n,
         "https://ipfs.io/someOtherIPFSHash",
       ]);
+    });
+  });
+
+  describe("Name and Symbol", () => {
+    it("should have the test token Name", async () => {
+      expect(await enft.name()).to.equal("Test NFT");
+    });
+    it("should have the test token Symbol", async () => {
+      expect(await enft.symbol()).to.equal("TNFT");
+    });
+  });
+
+  describe("deployClone", () => {
+    it("should revert with ExistentialNFTCloneFactory_ArgumentLengthMismatch if arraysizes are mismatched", async () => {
+      await expect(
+        enftCloneFactory.deployClone(
+          config.superTokens.map(({ address }) => address),
+          [],
+          config.requiredFlowRates,
+          config.optionTokenURIs,
+          config.tokenName,
+          config.tokenSymbol
+        )
+      ).to.be.revertedWithCustomError(
+        enftCloneFactory,
+        "ExistentialNFTCloneFactory_ArgumentLengthMismatch"
+      );
     });
   });
 });

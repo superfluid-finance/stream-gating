@@ -19,6 +19,8 @@ export type NetworkConfig = {
   recipients: Address[];
   requiredFlowRates: bigint[];
   optionTokenURIs: string[];
+  tokenName: string;
+  tokenSymbol: string;
 };
 
 const polygonMumbaiConfig: NetworkConfig = {
@@ -29,6 +31,8 @@ const polygonMumbaiConfig: NetworkConfig = {
   recipients: ["0x"],
   requiredFlowRates: [BigInt(0)],
   optionTokenURIs: [""],
+  tokenName: "Test NFT",
+  tokenSymbol: "TNFT",
 };
 
 const hardhatConfig: NetworkConfig = {

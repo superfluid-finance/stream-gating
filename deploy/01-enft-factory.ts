@@ -38,6 +38,8 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       config.recipients,
       config.requiredFlowRates,
       config.optionTokenURIs,
+      config.tokenName,
+      config.tokenSymbol,
     ];
 
     const enftCloneFactory = ExistentialNFTCloneFactory__factory.connect(
@@ -45,12 +47,11 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       signer
     );
 
-    const enftClone = await enftCloneFactory.deployClone(...initArgs);
-    const rc = await enftClone.wait();
+    const tx = await enftCloneFactory.deployClone(...initArgs);
+    const rc = await tx.wait();
 
     if (rc) {
-      //@ts-ignore
-      const cloneAddress = rc.logs[0].args[0];
+      const [cloneAddress] = await enftCloneFactory.getClones();
 
       process.env.EXISTENTIAL_NFT_CLONE_ADDRESS = cloneAddress;
     }
