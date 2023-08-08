@@ -38,7 +38,7 @@ contract ExistentialNFT is ERC721 {
         address[] memory recipients,
         int96[] memory requiredFlowRates,
         string[] memory optionTokenURIs
-    ) public {
+    ) external {
         if (initialized) {
             revert ExistentialNFT_AlreadyInitialized();
         }
