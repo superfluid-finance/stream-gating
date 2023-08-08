@@ -17,13 +17,6 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   const config = networkConfig[network.config.chainId!];
 
-  const args: any = [
-    config.superTokens.map(({ address }) => address),
-    config.recipients,
-    config.requiredFlowRates,
-    config.optionTokenURIs,
-  ];
-
   const existentialNFT = await deploy(CONTRACT_NAME, {
     from: deployer,
     args: [],
@@ -33,15 +26,28 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   log(`${CONTRACT_NAME} deployed at ${existentialNFT.address}`);
 
-  const enft = ExistentialNFT__factory.connect(existentialNFT.address, signer);
+  if (developmentChains.includes(network.name)) {
+    const args: any = [
+      config.superTokens.map(({ address }) => address),
+      config.recipients,
+      config.requiredFlowRates,
+      config.optionTokenURIs,
+    ];
 
-  await enft.initialize(...args);
+    const enft = ExistentialNFT__factory.connect(
+      existentialNFT.address,
+      signer
+    );
+
+    console.log("Initializing ExistentialNFT contract for test environment...");
+    await enft.initialize(...args);
+  }
 
   if (
     !developmentChains.includes(network.name) &&
     process.env.ETHERSCAN_API_KEY
   ) {
-    await verify(existentialNFT.address, args);
+    await verify(existentialNFT.address, []);
   }
 };
 export default deploy;

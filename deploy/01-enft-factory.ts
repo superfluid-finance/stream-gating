@@ -32,36 +32,39 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   log(`${CONTRACT_NAME} deployed at ${existentialNFTCloneFactory.address}`);
 
-  const enftCloneFactory = ExistentialNFTCloneFactory__factory.connect(
-    existentialNFTCloneFactory.address,
-    signer
-  );
+  if (developmentChains.includes(network.name)) {
+    const initArgs: any = [
+      config.superTokens.map(({ address }) => address),
+      config.recipients,
+      config.requiredFlowRates,
+      config.optionTokenURIs,
+    ];
 
-  const initArgs: any = [
-    config.superTokens.map(({ address }) => address),
-    config.recipients,
-    config.requiredFlowRates,
-    config.optionTokenURIs,
-  ];
-
-  const enftClone = await enftCloneFactory.deployClone(...initArgs);
-  const rc = await enftClone.wait();
-
-  if (rc) {
-    const networkName = network.name === "hardhat" ? "localhost" : network.name;
-    //@ts-ignore
-    const cloneAddress = rc.logs[0].args[0];
-
-    console.log(`ExistentialNFT clone deployed at: ${cloneAddress}`);
-
-    fs.writeFileSync(
-      path.resolve(
-        __dirname,
-        `../deployments/${networkName}/ExistentialNFTClone-${cloneAddress}.json`
-      ),
-      JSON.stringify({ address: cloneAddress }, null, 2),
-      { flag: "as+", encoding: "utf-8" }
+    const enftCloneFactory = ExistentialNFTCloneFactory__factory.connect(
+      existentialNFTCloneFactory.address,
+      signer
     );
+
+    const enftClone = await enftCloneFactory.deployClone(...initArgs);
+    const rc = await enftClone.wait();
+
+    if (rc) {
+      const networkName =
+        network.name === "hardhat" ? "localhost" : network.name;
+      //@ts-ignore
+      const cloneAddress = rc.logs[0].args[0];
+
+      console.log(`ExistentialNFT clone deployed at: ${cloneAddress}`);
+
+      fs.writeFileSync(
+        path.resolve(
+          __dirname,
+          `../deployments/${networkName}/ExistentialNFTClone.json`
+        ),
+        JSON.stringify({ address: cloneAddress }, null, 2),
+        { flag: "w+", encoding: "utf-8" }
+      );
+    }
   }
 
   if (
