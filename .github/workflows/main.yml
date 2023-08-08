@@ -1,0 +1,32 @@
+name: Tests
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [$default-branch]
+  pull_request:
+    branches:
+      - "*"
+
+concurrency:
+  group: ${{github.workflow}}-${{github.ref}}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Test hardhat-mocha on Ubuntu with Node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [18]
+    steps:
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+      - uses: actions/checkout@v2
+      - name: Install
+        run: yarn --frozen-lockfile
+      - name: Compile
+        run: yarn compile
+      - name: Run tests
+        run: yarn test
