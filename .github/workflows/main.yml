@@ -7,8 +7,6 @@ on:
   pull_request:
     branches:
       - "*"
-env:
-  mumbai_rpc: ${{ vars.POLYGON_MUMBAI_RPC_URL }}
 
 concurrency:
   group: ${{github.workflow}}-${{github.ref}}
@@ -22,9 +20,9 @@ jobs:
       matrix:
         node: [18]
     steps:
-      - name: log var
+      - name: ${{ vars.POLYGON_MUMBAI_RPC_URL }}
         run: |
-          echo "repository variable : $mumbai_rpc"
+          echo "repository variable"
       - uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node }}
