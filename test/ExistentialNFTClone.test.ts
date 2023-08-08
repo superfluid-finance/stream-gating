@@ -2,7 +2,6 @@ import { SignerWithAddress } from "@nomicfoundation/hardhat-ethers/signers";
 import { ExistentialNFT, ExistentialNFT__factory } from "../typechain-types";
 import { deployments, ethers } from "hardhat";
 import { expect } from "chai";
-import existentialNFTClone from "../deployments/localhost/ExistentialNFTClone.json";
 
 describe("ExistentialNFTClone", () => {
   let accounts: SignerWithAddress[],
@@ -14,8 +13,11 @@ describe("ExistentialNFTClone", () => {
 
     await deployments.fixture(["all"]);
 
-    enft = ExistentialNFT__factory.connect(
-      existentialNFTClone.address,
+    const existentialNFTCloneAddress =
+      process.env.EXISTENTIAL_NFT_CLONE_ADDRESS ?? "";
+
+g    enft = ExistentialNFT__factory.connect(
+      existentialNFTCloneAddress,
       deployer
     );
   });

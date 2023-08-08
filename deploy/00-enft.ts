@@ -39,7 +39,6 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       signer
     );
 
-    console.log("Initializing ExistentialNFT contract for test environment...");
     await enft.initialize(...args);
   }
 

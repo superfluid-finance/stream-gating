@@ -49,21 +49,9 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     const rc = await enftClone.wait();
 
     if (rc) {
-      const networkName =
-        network.name === "hardhat" ? "localhost" : network.name;
-
       const [cloneAddress] = await enftCloneFactory.getClones();
 
-      console.log(`ExistentialNFT clone deployed at: ${cloneAddress}`);
-
-      fs.writeFileSync(
-        path.resolve(
-          __dirname,
-          `../deployments/${networkName}/ExistentialNFTClone.json`
-        ),
-        JSON.stringify({ address: cloneAddress }, null, 2),
-        { flag: "w+", encoding: "utf-8" }
-      );
+      process.env.EXISTENTIAL_NFT_CLONE_ADDRESS = cloneAddress;
     }
   }
 
