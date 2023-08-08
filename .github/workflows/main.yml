@@ -31,6 +31,9 @@ jobs:
       - name: Compile
         run: yarn compile
       - name: Run tests
-        run: yarn test
+        run: yarn coverage
         env: 
           POLYGON_MUMBAI_RPC_URL: ${{ env.rpc }}
+      - name: Update Coverage Badge
+        if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+        uses: we-cli/coverage-badge-action@main
