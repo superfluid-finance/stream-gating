@@ -14,7 +14,19 @@ const RPC_URLS = {
 
 const hardhatUserConfig: HardhatUserConfig = {
   defaultNetwork: "hardhat",
-  solidity: "0.8.19",
+  solidity: {
+    compilers: [
+      {
+        version: "0.8.19",
+      },
+    ],
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 200,
+      },
+    },
+  },
   networks: {
     hardhat: {
       chainId: 31337,
@@ -33,6 +45,7 @@ const hardhatUserConfig: HardhatUserConfig = {
     enabled: true,
     currency: "USD",
   },
+
   dependencyCompiler: {
     paths: [
       "@superfluid-finance/ethereum-contracts/contracts/agreements/ConstantFlowAgreementV1.sol",
