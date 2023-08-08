@@ -11,8 +11,7 @@ contract ExistentialNFTCloneFactory {
     using Clones for address;
 
     address public immutable implementation;
-
-    event ExistentialNFTCloneFactory_CloneDeployed(address indexed clone);
+    address[] private clones;
 
     constructor(address _implementation) {
         implementation = _implementation;
@@ -42,8 +41,12 @@ contract ExistentialNFTCloneFactory {
             optionTokenURIs
         );
 
-        emit ExistentialNFTCloneFactory_CloneDeployed(address(clone));
+        clones.push(address(clone));
 
         return clone;
+    }
+
+    function getClones() external view returns (address[] memory) {
+        return clones;
     }
 }
