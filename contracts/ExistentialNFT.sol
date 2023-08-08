@@ -7,6 +7,7 @@ import {ISuperToken} from "@superfluid-finance/ethereum-contracts/contracts/inte
 import {SuperTokenV1Library} from "@superfluid-finance/ethereum-contracts/contracts/apps/SuperTokenV1Library.sol";
 
 error ExistentialNFT_TransferIsNotAllowed();
+error ExistentialNFT_AlreadyInitialized();
 
 struct PaymentOption {
     ISuperToken incomingFlowToken;
@@ -24,17 +25,24 @@ contract ExistentialNFT is ERC721 {
     using SuperTokenV1Library for ISuperToken;
 
     PaymentOption[] private paymentOptions;
+    bool private initialized;
+
+    constructor() ERC721("ExistentialNFT", "ENFT") {}
 
     /**
      * @notice Initializes the contract setting the given PaymentOptions
      * @dev Array parameters should be the same size.
      */
-    constructor(
+    function initialize(
         ISuperToken[] memory incomingFlowTokens,
         address[] memory recipients,
         int96[] memory requiredFlowRates,
         string[] memory optionTokenURIs
-    ) ERC721("Superfluid Existential NFT", "SFENFT") {
+    ) public {
+        if (initialized) {
+            revert ExistentialNFT_AlreadyInitialized();
+        }
+
         for (uint256 i = 0; i < incomingFlowTokens.length; i++) {
             paymentOptions.push(
                 PaymentOption(
@@ -45,6 +53,8 @@ contract ExistentialNFT is ERC721 {
                 )
             );
         }
+
+        initialized = true;
     }
 
     /**
