@@ -2,11 +2,10 @@ import { DeployFunction } from "hardhat-deploy/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import verify from "../utils/verify";
 import networkConfig, { developmentChains } from "../helper-hardhat.config";
-import {
-  ExistentialNFTCloneFactory__factory,
-  ExistentialNFT__factory,
-} from "../typechain-types";
+import { ExistentialNFTCloneFactory__factory } from "../typechain-types";
 import { ethers } from "hardhat";
+import fs from "fs";
+import path from "path";
 
 const CONTRACT_NAME = "ExistentialNFTCloneFactory";
 
@@ -46,10 +45,24 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   ];
 
   const enftClone = await enftCloneFactory.deployClone(...initArgs);
+  const rc = await enftClone.wait();
 
-  const implementation = await enftCloneFactory.implementation();
+  if (rc) {
+    const networkName = network.name === "hardhat" ? "localhost" : network.name;
+    //@ts-ignore
+    const cloneAddress = rc.logs[0].args[0];
 
-  log(`ExistentialNFT clone deployed at ${implementation}`);
+    console.log(`ExistentialNFT clone deployed at: ${cloneAddress}`);
+
+    fs.writeFileSync(
+      path.resolve(
+        __dirname,
+        `../deployments/${networkName}/ExistentialNFTClone-${cloneAddress}.json`
+      ),
+      JSON.stringify({ address: cloneAddress }, null, 2),
+      { flag: "as+", encoding: "utf-8" }
+    );
+  }
 
   if (
     !developmentChains.includes(network.name) &&

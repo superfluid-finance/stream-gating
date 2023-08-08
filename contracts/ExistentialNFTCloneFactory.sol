@@ -12,6 +12,8 @@ contract ExistentialNFTCloneFactory {
 
     address public immutable implementation;
 
+    event ExistentialNFTCloneFactory_CloneDeployed(address indexed clone);
+
     constructor(address _implementation) {
         implementation = _implementation;
     }
@@ -39,6 +41,8 @@ contract ExistentialNFTCloneFactory {
             requiredFlowRates,
             optionTokenURIs
         );
+
+        emit ExistentialNFTCloneFactory_CloneDeployed(address(clone));
 
         return clone;
     }
