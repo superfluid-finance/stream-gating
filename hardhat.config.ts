@@ -29,6 +29,10 @@ const hardhatUserConfig: HardhatUserConfig = {
       default: 0,
     },
   },
+  gasReporter: {
+    enabled: true,
+    currency: "USD",
+  },
   dependencyCompiler: {
     paths: [
       "@superfluid-finance/ethereum-contracts/contracts/agreements/ConstantFlowAgreementV1.sol",

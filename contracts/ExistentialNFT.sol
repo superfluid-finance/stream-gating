@@ -3,6 +3,8 @@
 pragma solidity ^0.8.19;
 
 import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import {ERC721Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
+import {Initializable} from "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 import {ISuperToken} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperToken.sol";
 import {SuperTokenV1Library} from "@superfluid-finance/ethereum-contracts/contracts/apps/SuperTokenV1Library.sol";
 
@@ -20,7 +22,7 @@ struct PaymentOption {
  * @notice Non-mintable NFT contract that is owned by a user as long as they have a positive flow rate
  * @dev Mirrors the Superfluid Checkout-Builder interface
  */
-contract ExistentialNFT is ERC721 {
+contract ExistentialNFT is ERC721Upgradeable {
     using SuperTokenV1Library for ISuperToken;
 
     PaymentOption[] private paymentOptions;
@@ -29,12 +31,16 @@ contract ExistentialNFT is ERC721 {
      * @notice Initializes the contract setting the given PaymentOptions
      * @dev Array parameters should be the same size.
      */
-    constructor(
+    function initialize(
         ISuperToken[] memory incomingFlowTokens,
         address[] memory recipients,
         int96[] memory requiredFlowRates,
-        string[] memory optionTokenURIs
-    ) ERC721("Superfluid Existential NFT", "SFENFT") {
+        string[] memory optionTokenURIs,
+        string memory name,
+        string memory symbol
+    ) public initializer {
+        __ERC721_init(name, symbol);
+
         for (uint256 i = 0; i < incomingFlowTokens.length; i++) {
             paymentOptions.push(
                 PaymentOption(

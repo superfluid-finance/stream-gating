@@ -27,6 +27,7 @@ export const mintWrapperSuperToken = async (
   const iface = new ethers.Interface([
     "function mint(address account, uint256 amount) public returns (bool)",
   ]);
+
   const data = iface.encodeFunctionData("mint", [
     to.address,
     parseEther("100"),

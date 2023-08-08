@@ -2,10 +2,12 @@ import { DeployFunction } from "hardhat-deploy/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import verify from "../utils/verify";
 import networkConfig, { developmentChains } from "../helper-hardhat.config";
-import { ExistentialNFT__factory } from "../typechain-types";
+import { ExistentialNFTCloneFactory__factory } from "../typechain-types";
 import { ethers } from "hardhat";
+import fs from "fs";
+import path from "path";
 
-const CONTRACT_NAME = "ExistentialNFT";
+const CONTRACT_NAME = "ExistentialNFTCloneFactory";
 
 const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { getNamedAccounts, deployments, network } = hre;
@@ -17,17 +19,21 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   const config = networkConfig[network.config.chainId!];
 
-  const existentialNFT = await deploy(CONTRACT_NAME, {
+  const existentialNFTDeployment = await deployments.get("ExistentialNFT");
+
+  const args: any = [existentialNFTDeployment.address];
+
+  const existentialNFTCloneFactory = await deploy(CONTRACT_NAME, {
     from: deployer,
-    args: [],
+    args,
     log: true,
     waitConfirmations: developmentChains.includes(network.name) ? 1 : 5,
   });
 
-  log(`${CONTRACT_NAME} deployed at ${existentialNFT.address}`);
+  log(`${CONTRACT_NAME} deployed at ${existentialNFTCloneFactory.address}`);
 
   if (developmentChains.includes(network.name)) {
-    const args: any = [
+    const initArgs: any = [
       config.superTokens.map(({ address }) => address),
       config.recipients,
       config.requiredFlowRates,
@@ -36,19 +42,26 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       config.tokenSymbol,
     ];
 
-    const enft = ExistentialNFT__factory.connect(
-      existentialNFT.address,
+    const enftCloneFactory = ExistentialNFTCloneFactory__factory.connect(
+      existentialNFTCloneFactory.address,
       signer
     );
 
-    await enft.initialize(...args);
+    const tx = await enftCloneFactory.deployClone(...initArgs);
+    const rc = await tx.wait();
+
+    if (rc) {
+      const [cloneAddress] = await enftCloneFactory.getClones();
+
+      process.env.EXISTENTIAL_NFT_CLONE_ADDRESS = cloneAddress;
+    }
   }
 
   if (
     !developmentChains.includes(network.name) &&
     process.env.ETHERSCAN_API_KEY
   ) {
-    await verify(existentialNFT.address, []);
+    await verify(existentialNFTCloneFactory.address, args);
   }
 };
 export default deploy;
