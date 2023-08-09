@@ -66,7 +66,7 @@ describe("ExistentialNFTCloneFactory", () => {
       expect(await enft.name()).to.equal("Test NFT");
     });
     it("should have the test token Symbol", async () => {
-      expect(await enft.symbol()).to.equal("TNFT");
+      expect(await enft.symbol()).to.equal("TST");
     });
   });
 
