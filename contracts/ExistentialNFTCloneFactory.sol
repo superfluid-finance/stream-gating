@@ -4,7 +4,6 @@ pragma solidity ^0.8.19;
 import {Clones} from "@openzeppelin/contracts/proxy/Clones.sol";
 import {ISuperToken} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperToken.sol";
 import {ExistentialNFT} from "./ExistentialNFT.sol";
-import "hardhat/console.sol";
 
 error ExistentialNFTCloneFactory_ArgumentLengthMismatch();
 
