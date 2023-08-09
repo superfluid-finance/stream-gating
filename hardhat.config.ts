@@ -2,7 +2,6 @@ import { HardhatUserConfig } from "hardhat/config";
 import { config } from "dotenv";
 import "@nomicfoundation/hardhat-toolbox";
 import "hardhat-deploy";
-g;
 import "hardhat-dependency-compiler";
 import { ethers } from "ethers";
 
