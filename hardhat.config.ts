@@ -2,8 +2,9 @@ import { HardhatUserConfig } from "hardhat/config";
 import { config } from "dotenv";
 import "@nomicfoundation/hardhat-toolbox";
 import "hardhat-deploy";
+g;
 import "hardhat-dependency-compiler";
-import { ZeroAddress } from "ethers";
+import { ethers } from "ethers";
 
 config();
 
@@ -15,7 +16,8 @@ const RPC_URLS = {
 
 const POLYGONSCAN_API_KEY = process.env.POLYGONSCAN_API_KEY || "";
 
-const PRIVATE_KEY = process.env.PRIVATE_KEY || ZeroAddress;
+const PRIVATE_KEY =
+  process.env.PRIVATE_KEY || ethers.Wallet.createRandom().privateKey;
 
 const hardhatUserConfig: HardhatUserConfig = {
   defaultNetwork: "hardhat",
