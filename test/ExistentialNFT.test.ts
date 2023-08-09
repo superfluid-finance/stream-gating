@@ -241,6 +241,36 @@ describe("ExistentialNFT", () => {
     });
   });
 
+  describe("tokenOf", () => {
+    it("should return zero on arbitrary address", async () => {
+      const token = await enft.tokenOf(ZeroAddress);
+
+      expect(token).to.equal(0);
+    });
+
+    it("should return an address converted to a tokenId if the user has a positive balance", async () => {
+      await mintWrapperSuperToken(config.superTokens[0], subscriber); // mint 100 fUSDCx
+
+      expect(await superToken.balanceOf(subscriber.address)).to.eq(
+        parseEther("100")
+      );
+
+      const tx = await cfaV1Forwarder.createFlow(
+        config.superTokens[0].address,
+        subscriber.address,
+        config.recipients[0],
+        config.requiredFlowRates[0].toString(),
+        "0x"
+      );
+
+      await tx.wait();
+
+      const token = await enft.tokenOf(subscriber.address);
+
+      expect(token).to.equal(642829559307850963015472508762062935916233390536n); // yaddress as BigInt
+    });
+  });
+
   describe("tokenURI", () => {
     it("should return empty string if there is no stream.", async () => {
       const token1 = await enft.tokenURI(1);

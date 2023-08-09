@@ -90,6 +90,16 @@ contract ExistentialNFT is ERC721Upgradeable {
     }
 
     /**
+     * @notice get the tokenId for an owner
+     * @dev one address can own only one token
+     * @param owner - is the address of the owner
+     * @return tokenId - the address converted to uint256, 0 if the owner has no positive flow rate
+     */
+    function tokenOf(address owner) public view returns (uint256) {
+        return balanceOf(owner) == 1 ? uint256(uint160(owner)) : 0;
+    }
+
+    /**
      * @notice This NFT is not transferable
      * @dev See {IERC721-transferFrom}.
      */
