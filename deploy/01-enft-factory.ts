@@ -1,11 +1,12 @@
 import { DeployFunction } from "hardhat-deploy/types";
-import { HardhatRuntimeEnvironment } from "hardhat/types";
+import { HardhatRuntimeEnvironment, Network } from "hardhat/types";
 import verify from "../utils/verify";
 import networkConfig, { developmentChains } from "../helper-hardhat.config";
 import { ExistentialNFTCloneFactory__factory } from "../typechain-types";
 import { ethers } from "hardhat";
 import fs from "fs";
 import path from "path";
+import hardhatUserConfig from "../hardhat.config";
 
 const CONTRACT_NAME = "ExistentialNFTCloneFactory";
 
@@ -57,10 +58,9 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     }
   }
 
-  if (
-    !developmentChains.includes(network.name) &&
-    process.env.ETHERSCAN_API_KEY
-  ) {
+  const apiKeys = hardhatUserConfig.etherscan?.apiKey!;
+
+  if (!developmentChains.includes(network.name)) {
     await verify(existentialNFTCloneFactory.address, args);
   }
 };

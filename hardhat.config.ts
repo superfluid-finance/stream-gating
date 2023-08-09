@@ -12,6 +12,10 @@ const RPC_URLS = {
   polygonMumbai: process.env.POLYGON_MUMBAI_RPC_URL || "",
 };
 
+const POLYGONSCAN_API_KEY = process.env.POLYGONSCAN_API_KEY || "";
+
+const PRIVATE_KEY = process.env.PRIVATE_KEY || "";
+
 const hardhatUserConfig: HardhatUserConfig = {
   defaultNetwork: "hardhat",
   solidity: {
@@ -28,6 +32,16 @@ const hardhatUserConfig: HardhatUserConfig = {
     },
   },
   networks: {
+    polygon: {
+      accounts: PRIVATE_KEY !== undefined ? [PRIVATE_KEY] : [],
+      chainId: 137,
+      url: RPC_URLS.polygon,
+    },
+    mumbai: {
+      accounts: PRIVATE_KEY !== undefined ? [PRIVATE_KEY] : [],
+      chainId: 80001,
+      url: RPC_URLS.polygonMumbai,
+    },
     hardhat: {
       chainId: 31337,
       forking: {
@@ -39,6 +53,13 @@ const hardhatUserConfig: HardhatUserConfig = {
   namedAccounts: {
     deployer: {
       default: 0,
+      0: PRIVATE_KEY != undefined ? PRIVATE_KEY : 0,
+    },
+  },
+  etherscan: {
+    apiKey: {
+      polygon: POLYGONSCAN_API_KEY,
+      polygonMumbai: POLYGONSCAN_API_KEY,
     },
   },
   gasReporter: {

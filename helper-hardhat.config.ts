@@ -28,11 +28,20 @@ const polygonMumbaiConfig: NetworkConfig = {
   superTokens: [fUSDCx, fUSDCx],
   hostAddress: polygonMumbai.contractsV1.host as Address,
   cfaV1ForwarderAddress: polygonMumbai.contractsV1.cfaV1Forwarder as Address,
-  recipients: ["0x"],
-  requiredFlowRates: [BigInt(0)],
-  optionTokenURIs: [""],
-  tokenName: "Test NFT",
-  tokenSymbol: "TNFT",
+  recipients: [
+    "0xdf3d1C11752B35A5a3d984cC86E5A535745412Fe",
+    "0xdf3d1C11752B35A5a3d984cC86E5A535745412Fe",
+  ],
+  requiredFlowRates: [
+    BigInt(Math.floor(MONTH_IN_SECONDS / 30)),
+    2n * BigInt(Math.floor(MONTH_IN_SECONDS / 30)),
+  ],
+  optionTokenURIs: [
+    "https://pbs.twimg.com/profile_images/1572586531960885251/xhE0jcBi_400x400.png",
+    "https://pbs.twimg.com/profile_images/1572586531960885251/xhE0jcBi_400x400.png",
+  ],
+  tokenName: "Superfluid Test Mumbai NFT",
+  tokenSymbol: "SFTF",
 };
 
 const hardhatConfig: NetworkConfig = {
@@ -42,14 +51,12 @@ const hardhatConfig: NetworkConfig = {
     "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
     "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
   ],
-  requiredFlowRates: [
-    BigInt(Math.floor(MONTH_IN_SECONDS / 30)),
-    2n * BigInt(Math.floor(MONTH_IN_SECONDS / 30)),
-  ],
   optionTokenURIs: [
     "https://ipfs.io/someIPFSHash",
     "https://ipfs.io/someOtherIPFSHash",
   ],
+  tokenName: "Test NFT",
+  tokenSymbol: "TST",
 };
 
 const networks: Record<number, NetworkConfig> = {

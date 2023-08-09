@@ -11,6 +11,7 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { getNamedAccounts, deployments, network } = hre;
   const { deploy, log } = deployments;
   const { deployer } = await getNamedAccounts();
+
   const signer = await ethers.getSigner(deployer);
 
   log(`Deploying ${CONTRACT_NAME} and waiting for confirmations...`);
@@ -44,10 +45,7 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     await enft.initialize(...args);
   }
 
-  if (
-    !developmentChains.includes(network.name) &&
-    process.env.ETHERSCAN_API_KEY
-  ) {
+  if (!developmentChains.includes(network.name)) {
     await verify(existentialNFT.address, []);
   }
 };

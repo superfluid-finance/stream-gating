@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "deploy": "hardhat deploy",
     "compile": "hardhat compile",
     "localnode": "NODE_ENV=local hardhat node",
     "coverage": "hardhat coverage && mv coverage/coverage-final.json coverage/coverage-summary.json",
