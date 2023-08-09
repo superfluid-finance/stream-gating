@@ -9,7 +9,7 @@ import { deployments, ethers, network } from "hardhat";
 import { expect } from "chai";
 import networks, { NetworkConfig } from "../helper-hardhat.config";
 
-describe("ExistentialNFTClone", () => {
+describe("ExistentialNFTCloneFactory", () => {
   let accounts: SignerWithAddress[],
     deployer: SignerWithAddress,
     enft: ExistentialNFT,
