@@ -3,6 +3,7 @@ import { config } from "dotenv";
 import "@nomicfoundation/hardhat-toolbox";
 import "hardhat-deploy";
 import "hardhat-dependency-compiler";
+import { ZeroAddress } from "ethers";
 
 config();
 
@@ -14,7 +15,7 @@ const RPC_URLS = {
 
 const POLYGONSCAN_API_KEY = process.env.POLYGONSCAN_API_KEY || "";
 
-const PRIVATE_KEY = process.env.PRIVATE_KEY || "";
+const PRIVATE_KEY = process.env.PRIVATE_KEY || ZeroAddress;
 
 const hardhatUserConfig: HardhatUserConfig = {
   defaultNetwork: "hardhat",
