@@ -70,7 +70,6 @@ const hardhatUserConfig: HardhatUserConfig = {
   },
   dependencyCompiler: {
     paths: [
-      "@superfluid-finance/ethereum-contracts/contracts/agreements/ConstantFlowAgreementV1.sol",
       "@superfluid-finance/ethereum-contracts/contracts/utils/CFAv1Forwarder.sol",
     ],
   },
