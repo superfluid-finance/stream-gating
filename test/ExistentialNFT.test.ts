@@ -52,14 +52,12 @@ describe("ExistentialNFT", () => {
         "0x42bb40bF79730451B11f6De1CbA222F17b87Afd7",
         "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
         86400n,
-        "https://ipfs.io/someIPFSHash",
       ]);
 
       expect(paymentOption2).to.deep.equal([
         "0x42bb40bF79730451B11f6De1CbA222F17b87Afd7",
         "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
         172800n,
-        "https://ipfs.io/someOtherIPFSHash",
       ]);
     });
   });
@@ -68,7 +66,7 @@ describe("ExistentialNFT", () => {
     it("should return empty paymentOption if there is no stream.", async () => {
       const paymentOption = await enft.getPaymentOptionFor(subscriber.address);
 
-      expect(paymentOption).to.deep.equal([ZeroAddress, ZeroAddress, 0n, ""]);
+      expect(paymentOption).to.deep.equal([ZeroAddress, ZeroAddress, 0n]);
     });
 
     it("should return the appropriate paymentOption according to flowRate(86400)", async () => {
@@ -297,7 +295,7 @@ describe("ExistentialNFT", () => {
 
       const tokenURI = await enft.tokenURI(subscriber.address);
 
-      expect(tokenURI).to.equal(config.optionTokenURIs[0]);
+      expect(tokenURI).to.equal(config.tokenURI);
     });
   });
 
