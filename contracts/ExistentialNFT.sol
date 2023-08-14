@@ -13,7 +13,6 @@ struct PaymentOption {
     ISuperToken incomingFlowToken;
     address recipient;
     int96 requiredFlowRate;
-    string optionTokenURI;
 }
 
 /**
@@ -25,6 +24,7 @@ contract ExistentialNFT is ERC721Upgradeable {
     using SuperTokenV1Library for ISuperToken;
 
     PaymentOption[] private paymentOptions;
+    string private _tokenURI;
 
     /**
      * @notice Initializes the contract setting the given PaymentOptions
@@ -34,9 +34,9 @@ contract ExistentialNFT is ERC721Upgradeable {
         ISuperToken[] memory incomingFlowTokens,
         address[] memory recipients,
         int96[] memory requiredFlowRates,
-        string[] memory optionTokenURIs,
         string memory name,
-        string memory symbol
+        string memory symbol,
+        string memory globalTokenURI
     ) public initializer {
         __ERC721_init(name, symbol);
 
@@ -45,10 +45,11 @@ contract ExistentialNFT is ERC721Upgradeable {
                 PaymentOption(
                     incomingFlowTokens[i],
                     recipients[i],
-                    requiredFlowRates[i],
-                    optionTokenURIs[i]
+                    requiredFlowRates[i]
                 )
             );
+
+            _tokenURI = globalTokenURI;
         }
     }
 
@@ -64,18 +65,17 @@ contract ExistentialNFT is ERC721Upgradeable {
     }
 
     /**
-     * @notice Overridden tokenURI, returning an depending on the flow rate of the owner
+     * @notice Overridden tokenURI, returning the URI set at deployment
      * @param tokenId - is the address of the owner
      * @dev See {IERC721-tokenURI}.
-     * @return tokenURI - of the owner if they have a positive flow rate, otherwise an empty string
+     * @return tokenURI - the global URI of the NFT set at deployment
      */
     function tokenURI(
         uint256 tokenId
     ) public view override returns (string memory) {
         address owner = address(uint160(tokenId));
-        PaymentOption memory paymentOption = getPaymentOptionFor(owner);
 
-        return balanceOf(owner) == 0 ? "" : paymentOption.optionTokenURI;
+        return balanceOf(owner) == 0 ? "" : _tokenURI;
     }
 
     /**

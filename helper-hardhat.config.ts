@@ -18,9 +18,9 @@ export type NetworkConfig = {
   cfaV1ForwarderAddress: Address;
   recipients: Address[];
   requiredFlowRates: bigint[];
-  optionTokenURIs: string[];
   tokenName: string;
   tokenSymbol: string;
+  tokenURI: string;
 };
 
 const polygonMumbaiConfig: NetworkConfig = {
@@ -36,10 +36,8 @@ const polygonMumbaiConfig: NetworkConfig = {
     BigInt(Math.floor(MONTH_IN_SECONDS / 30)),
     2n * BigInt(Math.floor(MONTH_IN_SECONDS / 30)),
   ],
-  optionTokenURIs: [
+  tokenURI:
     "https://pbs.twimg.com/profile_images/1572586531960885251/xhE0jcBi_400x400.png",
-    "https://pbs.twimg.com/profile_images/1572586531960885251/xhE0jcBi_400x400.png",
-  ],
   tokenName: "Superfluid Test Mumbai NFT",
   tokenSymbol: "SFTF",
 };
@@ -51,12 +49,9 @@ const hardhatConfig: NetworkConfig = {
     "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
     "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
   ],
-  optionTokenURIs: [
-    "https://ipfs.io/someIPFSHash",
-    "https://ipfs.io/someOtherIPFSHash",
-  ],
   tokenName: "Test NFT",
   tokenSymbol: "TST",
+  tokenURI: "https://ipfs.io/someIPFSHash",
 };
 
 const networks: Record<number, NetworkConfig> = {
