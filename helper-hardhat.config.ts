@@ -36,10 +36,10 @@ const polygonMumbaiConfig: NetworkConfig = {
     BigInt(Math.floor(MONTH_IN_SECONDS / 30)),
     2n * BigInt(Math.floor(MONTH_IN_SECONDS / 30)),
   ],
-  tokenURI:
-    "https://pbs.twimg.com/profile_images/1572586531960885251/xhE0jcBi_400x400.png",
   tokenName: "Superfluid Test Mumbai NFT",
   tokenSymbol: "SFTF",
+  tokenURI:
+    "https://pbs.twimg.com/profile_images/1572586531960885251/xhE0jcBi_400x400.png",
 };
 
 const hardhatConfig: NetworkConfig = {

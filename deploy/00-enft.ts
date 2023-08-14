@@ -34,7 +34,7 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       config.requiredFlowRates,
       config.tokenName,
       config.tokenSymbol,
-      config.optionTokenURI,
+      config.tokenURI,
     ];
 
     const enft = ExistentialNFT__factory.connect(

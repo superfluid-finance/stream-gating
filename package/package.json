@@ -14,7 +14,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "rimraf dist && cp -R ../typechain-types ./src && tsc -p ./tsconfig.json"
+    "build": "rimraf dist && cp -R ../typechain-types ./src && tsc -p ./tsconfig.build.json"
   },
   "devDependencies": {
     "rimraf": "^5.0.1",
