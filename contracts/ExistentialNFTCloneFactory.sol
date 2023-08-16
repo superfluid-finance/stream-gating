@@ -11,7 +11,8 @@ contract ExistentialNFTCloneFactory {
     using Clones for address;
 
     address public immutable implementation;
-    address[] private clones;
+
+    event ExistentialNFT_CloneDeployed(address indexed clone);
 
     constructor(address _implementation) {
         implementation = _implementation;
@@ -36,7 +37,7 @@ contract ExistentialNFTCloneFactory {
 
         ExistentialNFT clone = ExistentialNFT(implementation.clone());
 
-        clones.push(address(clone));
+        emit ExistentialNFT_CloneDeployed(address(clone));
 
         clone.initialize(
             incomingFlowTokens,
@@ -46,9 +47,5 @@ contract ExistentialNFTCloneFactory {
             name,
             symbol
         );
-    }
-
-    function getClones() external view returns (address[] memory) {
-        return clones;
     }
 }

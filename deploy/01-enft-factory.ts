@@ -52,9 +52,8 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     const rc = await tx.wait();
 
     if (rc) {
-      const [cloneAddress] = await enftCloneFactory.getClones();
-
-      process.env.EXISTENTIAL_NFT_CLONE_ADDRESS = cloneAddress;
+      process.env.EXISTENTIAL_NFT_CLONE_ADDRESS =
+        "0x21bbc44ca3ab1ce2302b77b65e087176932b68c4";
     }
   }
 
