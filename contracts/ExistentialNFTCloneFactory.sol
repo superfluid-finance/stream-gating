@@ -22,15 +22,14 @@ contract ExistentialNFTCloneFactory {
         ISuperToken[] memory incomingFlowTokens,
         address[] memory recipients,
         int96[] memory requiredFlowRates,
-        string[] memory optionTokenURIs,
         string memory name,
-        string memory symbol
+        string memory symbol,
+        string memory tokenURI
     ) external {
         if (
             !(incomingFlowTokens.length > 0 &&
                 incomingFlowTokens.length == recipients.length &&
-                incomingFlowTokens.length == requiredFlowRates.length &&
-                incomingFlowTokens.length == optionTokenURIs.length)
+                incomingFlowTokens.length == requiredFlowRates.length)
         ) {
             revert ExistentialNFTCloneFactory_ArgumentLengthMismatch();
         }
@@ -43,9 +42,9 @@ contract ExistentialNFTCloneFactory {
             incomingFlowTokens,
             recipients,
             requiredFlowRates,
-            optionTokenURIs,
             name,
-            symbol
+            symbol,
+            tokenURI
         );
     }
 }

@@ -2,13 +2,13 @@
   "name": "enft",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "deploy": "hardhat deploy",
     "compile": "hardhat compile",
     "localnode": "NODE_ENV=local hardhat node",
     "coverage": "hardhat coverage && mv coverage/coverage-final.json coverage/coverage-summary.json",
-    "test": "NODE_ENV=test && hardhat test"
+    "test": "NODE_ENV=test && hardhat test",
+    "build:package": "yarn compile && cd ./package && yarn build"
   },
   "keywords": [],
   "author": "",

@@ -32,9 +32,9 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       config.superTokens.map(({ address }) => address),
       config.recipients,
       config.requiredFlowRates,
-      config.optionTokenURIs,
       config.tokenName,
       config.tokenSymbol,
+      config.tokenURI,
     ];
 
     const enft = ExistentialNFT__factory.connect(
