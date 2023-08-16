@@ -1,6 +1,6 @@
 {
   "name": "stream-gating",
-  "version": "0.0.13",
+  "version": "0.0.15",
   "description": "Utils, for stream gating with existential NFT-s",
   "author": "Superfluid Finance",
   "license": "MIT",
