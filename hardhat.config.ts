@@ -55,7 +55,6 @@ const hardhatUserConfig: HardhatUserConfig = {
         initialIndex: 0,
         path: "m/44'/60'/0'/0",
         passphrase: "",
-        g,
       },
       chainId: 80001,
       url: RPC_URLS.mumbai,
