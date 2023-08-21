@@ -5,6 +5,7 @@ on:
 env:
   MNEMONIC: ${{secrets.BUILD_AGENT_MNEMONIC}}
   POLYGON_MUMBAI_RPC_URL: https://rpc-endpoints.superfluid.dev/polygon-mumbai
+  ETHERSCAN_API_KEY: ${{secrets.ETHERSCAN_API_KEY}}
   
 jobs:
   deploy:
