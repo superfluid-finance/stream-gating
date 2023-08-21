@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 env:
   MNEMONIC: ${{secrets.BUILD_AGENT_MNEMONIC}}
-  POLYGON_MUMBAI_RPC_URL: ${{secrets.POLYGON_MUMBAI_PROVIDER_URL}}
+  POLYGON_MUMBAI_RPC_URL: https://rpc-endpoints.superfluid.dev/polygon-mumbai
   
 jobs:
   deploy:
@@ -18,10 +18,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 18
-      - name: Debug Environment Variables
-        run: |
-          echo "POLYGON_MUMBAI_RPC_URL: $POLYGON_MUMBAI_RPC_URL"
-          echo "Matrix Network: ${{matrix.networks}}"
       - name: Install
         run: yarn
       - name: Compile
