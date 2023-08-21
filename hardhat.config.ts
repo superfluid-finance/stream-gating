@@ -10,11 +10,14 @@ config();
 const RPC_URLS = {
   mainnet: process.env.MAINNET_RPC_URL || "",
   polygon: process.env.POLYGON_RPC_URL || "",
-  polygonMumbai: process.env.POLYGON_MUMBAI_RPC_URL || "",
+  mumbai: process.env.POLYGON_MUMBAI_RPC_URL || "",
 };
 
 const POLYGONSCAN_API_KEY = process.env.POLYGONSCAN_API_KEY || "";
 
+const MNEMONIC =
+  process.env.MNEMONIC ||
+  "test test test test test test test test test test test junk";
 const PRIVATE_KEY =
   process.env.PRIVATE_KEY || ethers.Wallet.createRandom().privateKey;
 
@@ -35,19 +38,32 @@ const hardhatUserConfig: HardhatUserConfig = {
   },
   networks: {
     polygon: {
-      accounts: PRIVATE_KEY !== undefined ? [PRIVATE_KEY] : [],
+      accounts: {
+        mnemonic: MNEMONIC,
+        count: 1,
+        initialIndex: 0,
+        path: "m/44'/60'/0'/0",
+        passphrase: "",
+      },
       chainId: 137,
       url: RPC_URLS.polygon,
     },
     mumbai: {
-      accounts: PRIVATE_KEY !== undefined ? [PRIVATE_KEY] : [],
+      accounts: {
+        mnemonic: MNEMONIC,
+        count: 1,
+        initialIndex: 0,
+        path: "m/44'/60'/0'/0",
+        passphrase: "",
+        g,
+      },
       chainId: 80001,
-      url: RPC_URLS.polygonMumbai,
+      url: RPC_URLS.mumbai,
     },
     hardhat: {
       chainId: 31337,
       forking: {
-        url: RPC_URLS.polygonMumbai,
+        url: RPC_URLS.mumbai,
         enabled: true,
       },
     },
