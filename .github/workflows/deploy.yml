@@ -1,0 +1,26 @@
+name: Deploy Contracts
+
+on:
+  workflow_dispatch:
+env:
+  MNEMONIC: ${{secrets.BUILD_AGENT_MNEMONIC}}
+  POLYGON_MUMBAI_RPC_URL: ${{secrets.POLYGON_MUMBAI_PROVIDER_URL}}
+  
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy: 
+      matrix:
+        networks: ["mumbai"] #[ "avalanche-c", "arbitrum-one", "base-mainnet", "bsc-mainnet", "eth-mainnet", "eth-goerli", "xdai-mainnet", "optimism-mainnet", "polygon-mainnet", "polygon-mumbai"]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18
+      - name: Install
+        run: yarn
+      - name: Compile
+        run: yarn compile
+      - name: Deploy
+        run: yarn deploy --network ${{matrix.networks}}
