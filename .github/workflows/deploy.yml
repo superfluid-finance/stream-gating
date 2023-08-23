@@ -15,6 +15,9 @@ env:
   OPTIMISTIC_API_KEY: ${{secrets.OPTIMISTIC_API_KEY}}
   POLYGONSCAN_API_KEY: ${{secrets.POLYGONSCAN_API_KEY}}
 
+permissions:
+  contents: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -22,7 +25,7 @@ jobs:
       matrix:
         networks: ["polygon-mainnet", "polygon-mumbai"] #[ "avalanche-c", "arbitrum-one", "base-mainnet", "bsc-mainnet", "eth-mainnet", "eth-goerli", "xdai-mainnet", "optimism-mainnet", "polygon-mainnet", "polygon-mumbai"]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install node
         uses: actions/setup-node@v1
         with:
@@ -33,3 +36,6 @@ jobs:
         run: yarn compile
       - name: Deploy
         run: yarn deploy --network ${{matrix.networks}}
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Update Deployments
