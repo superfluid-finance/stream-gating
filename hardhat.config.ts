@@ -66,7 +66,7 @@ const hardhatUserConfig: HardhatUserConfig = {
     "base-mainnet": {
       accounts,
       chainId: 8453,
-      url: `${SUPERFLUD_RPC_HOST}/base-main`,
+      url: "https://mainnet.base.org", // `${SUPERFLUD_RPC_HOST}/base-mainnet`,
     },
     "bsc-mainnet": {
       accounts,
@@ -107,7 +107,7 @@ const hardhatUserConfig: HardhatUserConfig = {
     "base-goerli": {
       accounts,
       chainId: 84531,
-      url: `${SUPERFLUD_RPC_HOST}/base-goerli`,
+      url: "https://goerli.base.org", //`${SUPERFLUD_RPC_HOST}/base-goerli`,
     },
     "eth-goerli": {
       accounts,
