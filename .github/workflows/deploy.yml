@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        networks: ["xdai-mainnet"] # ["arbitrum-one", "avalanche-c","base-mainnet","bsc-mainnet", "celo-mainnet", "polygon-mainnet"]
+        networks: ["celo-mainnet", "xdai-mainnet"] # ["arbitrum-one", "avalanche-c","base-mainnet","bsc-mainnet", "celo-mainnet", "polygon-mainnet"]
     steps:
       - uses: actions/checkout@v3
       - name: Install node

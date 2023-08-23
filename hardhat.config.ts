@@ -1,7 +1,6 @@
 import { HardhatUserConfig } from "hardhat/config";
 import { config } from "dotenv";
-// import "@nomicfoundation/hardhat-toolbox";
-import "hardhat-celo";
+import "@nomicfoundation/hardhat-toolbox";
 import "hardhat-deploy";
 import "hardhat-dependency-compiler";
 import { ethers } from "ethers";
@@ -193,6 +192,14 @@ const hardhatUserConfig: HardhatUserConfig = {
         urls: {
           apiURL: "https://api-goerli.basescan.org/api",
           browserURL: "https://goerli.basescan.org",
+        },
+      },
+      {
+        network: "celo-mainnet",
+        chainId: 42220,
+        urls: {
+          apiURL: "https://api.celoscan.io/api",
+          browserURL: "https://celoscan.io",
         },
       },
     ],
