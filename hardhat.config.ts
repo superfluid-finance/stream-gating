@@ -125,6 +125,8 @@ const hardhatUserConfig: HardhatUserConfig = {
       accounts,
       chainId: 420,
       url: `${SUPERFLUD_RPC_HOST}/optimism-goerli`,
+      gasPrice: 1000000000,
+      g,
     },
     "polygon-mumbai": {
       accounts,
