@@ -1,10 +1,11 @@
 import { HardhatUserConfig } from "hardhat/config";
 import { config } from "dotenv";
-import "@nomicfoundation/hardhat-toolbox";
+// import "@nomicfoundation/hardhat-toolbox";
+import "hardhat-celo";
 import "hardhat-deploy";
 import "hardhat-dependency-compiler";
-import "hardhat-celo";
 import { ethers } from "ethers";
+import "hardhat-celo";
 
 config();
 
