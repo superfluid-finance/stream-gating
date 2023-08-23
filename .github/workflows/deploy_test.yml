@@ -46,11 +46,8 @@ jobs:
         run: yarn compile
       - name: Deploy
         run: yarn deploy --network ${{matrix.networks}}
-
-  commit_and_push:
-    needs: deploy
-    runs-on: ubuntu-latest
-    steps:
+      - name: Pull latest changes
+        run: git pull origin main
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: Update Deployments
+          commit_message: Update ${{matrix.networks}} deployments
