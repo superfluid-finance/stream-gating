@@ -155,7 +155,7 @@ const hardhatUserConfig: HardhatUserConfig = {
       arbitrumOne: BLOCK_EXPLORER_API_KEYS.arbiScan,
       avalanche: BLOCK_EXPLORER_API_KEYS.snowTrace,
       "base-mainnet": BLOCK_EXPLORER_API_KEYS.baseScan,
-      bscMainnet: BLOCK_EXPLORER_API_KEYS.bscScan,
+      bsc: BLOCK_EXPLORER_API_KEYS.bscScan,
       "celo-mainnet": BLOCK_EXPLORER_API_KEYS.celoScan,
       mainnet: BLOCK_EXPLORER_API_KEYS.etherScan,
       "xdai-mainnet": BLOCK_EXPLORER_API_KEYS.gnosisScan,
