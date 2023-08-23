@@ -4,31 +4,11 @@ import "@nomicfoundation/hardhat-toolbox";
 import "hardhat-deploy";
 import "hardhat-dependency-compiler";
 import { ethers } from "ethers";
+import metadata from "@superfluid-finance/metadata";
 
 config();
 
-const RPC_URLS = {
-  arbitrum: process.env.ARBITRUM_RPC_URL || "",
-  avalanche: process.env.AVALANCHE_RPC_URL || "",
-  base: process.env.BASE_RPC_URL || "",
-  bsc: process.env.BSC_RPC_URL || "",
-  celo: process.env.CELO_RPC_URL || "",
-  ethereum: process.env.ETHEREUM_RPC_URL || "",
-  gnosis: process.env.GNOSIS_RPC_URL || "",
-  optimism: process.env.OPTIMISM_RPC_URL || "",
-  polygon: process.env.POLYGON_RPC_URL || "",
-};
-
-const TESTNET_RPC_URLS = {
-  arbitrumGoerli: process.env.ARBITRUM_GOERLI_RPC_URL || "",
-  avalancheFuji: process.env.AVALANCHE_FUJI_RPC_URL || "",
-  baseGoerli: process.env.BASE_GOERLI_RPC_URL || "",
-  goerli: process.env.GOERLI_RPC_URL || "",
-  optimismGoerli: process.env.OPTIMISM_GOERLI_RPC_URL || "",
-  polygonMumbai: process.env.POLYGON_MUMBAI_RPC_URL || "",
-  polygonZKEVM: process.env.POLYGON_ZKEVM_RPC_URL || "",
-  sepolia: process.env.SEPOLIA_RPC_URL || "",
-};
+const SUPERFLUD_RPC_HOST = process.env.SUPERFLUID_RPC_HOST || "";
 
 const BLOCK_EXPLORER_API_KEYS = {
   arbiScan: process.env.ARBISCAN_API_KEY || "",
@@ -73,91 +53,91 @@ const hardhatUserConfig: HardhatUserConfig = {
   },
   networks: {
     // mainnets
-    arbitrum: {
+    "arbitrum-one": {
       accounts,
       chainId: 42161,
-      url: RPC_URLS.base,
+      url: `${SUPERFLUD_RPC_HOST}/arbitrum-one`,
     },
-    avalanche: {
+    "avalanche-c": {
       accounts,
       chainId: 43114,
-      url: RPC_URLS.base,
+      url: `${SUPERFLUD_RPC_HOST}/avalanche-c`,
     },
-    base: {
+    "base-mainnet": {
       accounts,
       chainId: 8453,
-      url: RPC_URLS.base,
+      url: `${SUPERFLUD_RPC_HOST}/base-mainnet`,
     },
-    bsc: {
+    "bsc-mainnet": {
       accounts,
       chainId: 56,
-      url: RPC_URLS.base,
+      url: `${SUPERFLUD_RPC_HOST}/bsc-mainnet`,
     },
-    ethereum: {
+    "eth-mainnet": {
       accounts,
       chainId: 1,
-      url: RPC_URLS.ethereum,
+      url: `${SUPERFLUD_RPC_HOST}/eth-mainnet`,
     },
-    gnosis: {
+    "xdai-mainnet": {
       accounts,
       chainId: 100,
-      url: RPC_URLS.gnosis,
+      url: `${SUPERFLUD_RPC_HOST}/xdai-mainnet`,
     },
-    optimism: {
+    "optimism-mainnet": {
       accounts,
       chainId: 10,
-      url: RPC_URLS.optimism,
+      url: `${SUPERFLUD_RPC_HOST}/optimism-mainnet`,
     },
-    polygon: {
+    "polygon-mainnet": {
       accounts,
       chainId: 137,
-      url: RPC_URLS.polygon,
+      url: `${SUPERFLUD_RPC_HOST}/polygon-mainnet`,
     },
     // testnets
-    arbitrumGoerli: {
+    "arbitrum-goerli": {
       accounts,
       chainId: 421611,
-      url: TESTNET_RPC_URLS.arbitrumGoerli,
+      url: `${SUPERFLUD_RPC_HOST}/arbitrum-goerli`,
     },
-    avalancheFuji: {
+    "avalanche-fuji": {
       accounts,
       chainId: 43113,
-      url: TESTNET_RPC_URLS.avalancheFuji,
+      url: `${SUPERFLUD_RPC_HOST}/avalanche-fuji`,
     },
-    baseGoerli: {
+    "base-goerli": {
       accounts,
       chainId: 84531,
-      url: TESTNET_RPC_URLS.baseGoerli,
+      url: `${SUPERFLUD_RPC_HOST}/base-goerli`,
     },
-    goerli: {
+    "eth-goerli": {
       accounts,
       chainId: 5,
-      url: TESTNET_RPC_URLS.goerli,
+      url: `${SUPERFLUD_RPC_HOST}/eth-goerli`,
     },
-    optimismGoerli: {
+    "optimism-goerli": {
       accounts,
       chainId: 420,
-      url: TESTNET_RPC_URLS.optimismGoerli,
+      url: `${SUPERFLUD_RPC_HOST}/optimism-goerli`,
     },
-    polygonZKEVM: {
+    "polygon-mumbai": {
+      chainId: 80001,
+      url: `${SUPERFLUD_RPC_HOST}/polygon-mumbai`,
+    },
+    "polygon-zkevm-testnet": {
       accounts,
       chainId: 1101,
-      url: TESTNET_RPC_URLS.polygonZKEVM,
+      url: `${SUPERFLUD_RPC_HOST}/polygon-zkevm-testnet`,
     },
-    polygonMumbai: {
-      chainId: 80001,
-      url: TESTNET_RPC_URLS.polygonMumbai,
-    },
-    sepolia: {
+    "eth-sepolia": {
       accounts,
       chainId: 69,
-      url: TESTNET_RPC_URLS.sepolia,
+      url: `${SUPERFLUD_RPC_HOST}/eth-sepolia`,
     },
     // local
     hardhat: {
       chainId: 31337,
       forking: {
-        url: TESTNET_RPC_URLS.polygonMumbai,
+        url: `${SUPERFLUD_RPC_HOST}/polygon-mumbai`,
         enabled: true,
       },
     },
@@ -171,24 +151,24 @@ const hardhatUserConfig: HardhatUserConfig = {
   etherscan: {
     apiKey: {
       // mainnets
-      arbitrum: BLOCK_EXPLORER_API_KEYS.arbiScan,
-      avalanche: BLOCK_EXPLORER_API_KEYS.avaScan,
-      base: BLOCK_EXPLORER_API_KEYS.baseScan,
-      bsc: BLOCK_EXPLORER_API_KEYS.bscScan,
-      celo: BLOCK_EXPLORER_API_KEYS.celoScan,
-      ethereum: BLOCK_EXPLORER_API_KEYS.etherScan,
-      gnosis: BLOCK_EXPLORER_API_KEYS.gnosisScan,
-      optimism: BLOCK_EXPLORER_API_KEYS.optimistic,
-      polygon: BLOCK_EXPLORER_API_KEYS.polygonScan,
+      "arbitrum-one": BLOCK_EXPLORER_API_KEYS.arbiScan,
+      "avalanche-c": BLOCK_EXPLORER_API_KEYS.avaScan,
+      "base-mainnet": BLOCK_EXPLORER_API_KEYS.baseScan,
+      "bsc-mainnet": BLOCK_EXPLORER_API_KEYS.bscScan,
+      "celo-mainnet": BLOCK_EXPLORER_API_KEYS.celoScan,
+      "eth-mainnet": BLOCK_EXPLORER_API_KEYS.etherScan,
+      "xdai-mainnet": BLOCK_EXPLORER_API_KEYS.gnosisScan,
+      "optimism-mainnet": BLOCK_EXPLORER_API_KEYS.optimistic,
+      "polygon-mainnet": BLOCK_EXPLORER_API_KEYS.polygonScan,
       // testnets
-      arbitrumGoerli: BLOCK_EXPLORER_API_KEYS.arbiScan,
-      avalancheFuji: BLOCK_EXPLORER_API_KEYS.avaScan,
-      baseGoerli: BLOCK_EXPLORER_API_KEYS.baseScan,
-      goerli: BLOCK_EXPLORER_API_KEYS.etherScan,
-      optimismGoerli: BLOCK_EXPLORER_API_KEYS.optimistic,
-      polygonZKEVM: BLOCK_EXPLORER_API_KEYS.polygonScan,
-      polygonMumbai: BLOCK_EXPLORER_API_KEYS.polygonScan,
-      sepolia: BLOCK_EXPLORER_API_KEYS.etherScan,
+      "arbitrum-goerli": BLOCK_EXPLORER_API_KEYS.arbiScan,
+      "avalanche-fuji": BLOCK_EXPLORER_API_KEYS.avaScan,
+      "base-goerli": BLOCK_EXPLORER_API_KEYS.baseScan,
+      "eth-goerli": BLOCK_EXPLORER_API_KEYS.etherScan,
+      "optimism-goerli": BLOCK_EXPLORER_API_KEYS.optimistic,
+      "polygon-mumbai": BLOCK_EXPLORER_API_KEYS.polygonScan,
+      "polygon-zkevm-testnet": BLOCK_EXPLORER_API_KEYS.polygonScan,
+      "eth-sepolia": BLOCK_EXPLORER_API_KEYS.etherScan,
     },
   },
   gasReporter: {
