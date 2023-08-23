@@ -19,6 +19,7 @@ const BLOCK_EXPLORER_API_KEYS = {
   gnosisScan: process.env.GNOSISSCAN_API_KEY || "",
   optimistic: process.env.OPTIMISTIC_API_KEY || "",
   polygonScan: process.env.POLYGONSCAN_API_KEY || "",
+  polygonScanZKEVM: process.env.POLYGONSCAN_ZKEVM_API_KEY || "",
 };
 
 const MNEMONIC =
@@ -136,7 +137,7 @@ const hardhatUserConfig: HardhatUserConfig = {
     },
     "eth-sepolia": {
       accounts,
-      chainId: 69,
+      chainId: 11155111,
       url: `${SUPERFLUD_RPC_HOST}/eth-sepolia`,
     },
     // local
@@ -159,7 +160,7 @@ const hardhatUserConfig: HardhatUserConfig = {
       // mainnets
       arbitrumOne: BLOCK_EXPLORER_API_KEYS.arbiScan,
       avalanche: BLOCK_EXPLORER_API_KEYS.snowTrace,
-      "base-mainnet": BLOCK_EXPLORER_API_KEYS.baseScan,
+      base: BLOCK_EXPLORER_API_KEYS.baseScan,
       bsc: BLOCK_EXPLORER_API_KEYS.bscScan,
       "celo-mainnet": BLOCK_EXPLORER_API_KEYS.celoScan,
       mainnet: BLOCK_EXPLORER_API_KEYS.etherScan,
@@ -167,38 +168,30 @@ const hardhatUserConfig: HardhatUserConfig = {
       optimisticEthereum: BLOCK_EXPLORER_API_KEYS.optimistic,
       polygon: BLOCK_EXPLORER_API_KEYS.polygonScan,
       // testnets
-      "arbitrum-goerli": BLOCK_EXPLORER_API_KEYS.arbiScan,
-      avalancheFuji: BLOCK_EXPLORER_API_KEYS.snowTrace,
-      "base-goerli": BLOCK_EXPLORER_API_KEYS.baseScan,
-      "eth-goerli": BLOCK_EXPLORER_API_KEYS.etherScan,
-      "optimism-goerli": BLOCK_EXPLORER_API_KEYS.optimistic,
+      arbitrumGoerli: BLOCK_EXPLORER_API_KEYS.arbiScan,
+      avalancheFujiTestnet: BLOCK_EXPLORER_API_KEYS.snowTrace,
+      baseGoerli: BLOCK_EXPLORER_API_KEYS.baseScan,
+      goerli: BLOCK_EXPLORER_API_KEYS.etherScan,
+      optimisticGoerli: BLOCK_EXPLORER_API_KEYS.optimistic,
       polygonMumbai: BLOCK_EXPLORER_API_KEYS.polygonScan,
-      "polygon-zkevm-testnet": BLOCK_EXPLORER_API_KEYS.polygonScan,
-      "eth-sepolia": BLOCK_EXPLORER_API_KEYS.etherScan,
+      "polygon-zkevm-testnet": BLOCK_EXPLORER_API_KEYS.polygonScanZKEVM,
+      sepolia: BLOCK_EXPLORER_API_KEYS.etherScan,
     },
     customChains: [
-      {
-        network: "base-mainnet",
-        chainId: 8453,
-        urls: {
-          apiURL: "https://api.basescan.org/api",
-          browserURL: "https://basescan.org",
-        },
-      },
-      {
-        network: "base-goerli",
-        chainId: 84531,
-        urls: {
-          apiURL: "https://api-goerli.basescan.org/api",
-          browserURL: "https://goerli.basescan.org",
-        },
-      },
       {
         network: "celo-mainnet",
         chainId: 42220,
         urls: {
           apiURL: "https://api.celoscan.io/api",
           browserURL: "https://celoscan.io",
+        },
+      },
+      {
+        network: "polygon-zkevm-testnet",
+        chainId: 1101,
+        urls: {
+          apiURL: "https://api-zkevm.polygonscan.com/api",
+          browserURL: "https://zkevm.polygonscan.com",
         },
       },
     ],
