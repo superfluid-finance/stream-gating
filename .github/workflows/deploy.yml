@@ -14,6 +14,7 @@ env:
   GNOSISSCAN_API_KEY: ${{secrets.GNOSISSCAN_API_KEY}}
   OPTIMISTIC_API_KEY: ${{secrets.OPTIMISTIC_API_KEY}}
   POLYGONSCAN_API_KEY: ${{secrets.POLYGONSCAN_API_KEY}}
+  POLYGONSCAN_ZKEVM_API_KEY: ${{secrets.POLYGONSCAN_ZKEVM_API_KEY}}
 
 permissions:
   contents: write
@@ -25,14 +26,14 @@ jobs:
       matrix:
         networks:
           [
-            "arbitrum-goerli",
-            "avalanche-fuji",
-            "base-goerli",
-            "eth-goerli",
-            "optimism-goerli",
-            "polygon-mumbai",
-            "polygon-zkevm-testnet",
-            "eth-sepolia",
+            "arbitrum-one",
+            "avalanche-c",
+            "base-mainnet",
+            "bsc-mainnet",
+            "celo-mainnet",
+            "optimism-mainnet",
+            "polygon-mainnet",
+            "xdai-mainnet",
           ]
     steps:
       - uses: actions/checkout@v3
