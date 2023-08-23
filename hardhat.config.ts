@@ -4,7 +4,6 @@ import "@nomicfoundation/hardhat-toolbox";
 import "hardhat-deploy";
 import "hardhat-dependency-compiler";
 import { ethers } from "ethers";
-import "hardhat-celo";
 
 config();
 
