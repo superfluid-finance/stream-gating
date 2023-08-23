@@ -153,7 +153,7 @@ const hardhatUserConfig: HardhatUserConfig = {
     apiKey: {
       // mainnets
       arbitrumOne: BLOCK_EXPLORER_API_KEYS.arbiScan,
-      "avalanche-c": BLOCK_EXPLORER_API_KEYS.snowTrace,
+      avalanche: BLOCK_EXPLORER_API_KEYS.snowTrace,
       "base-mainnet": BLOCK_EXPLORER_API_KEYS.baseScan,
       bscMainnet: BLOCK_EXPLORER_API_KEYS.bscScan,
       "celo-mainnet": BLOCK_EXPLORER_API_KEYS.celoScan,
@@ -163,7 +163,7 @@ const hardhatUserConfig: HardhatUserConfig = {
       polygon: BLOCK_EXPLORER_API_KEYS.polygonScan,
       // testnets
       "arbitrum-goerli": BLOCK_EXPLORER_API_KEYS.arbiScan,
-      "avalanche-fuji": BLOCK_EXPLORER_API_KEYS.snowTrace,
+      avalancheFuji: BLOCK_EXPLORER_API_KEYS.snowTrace,
       "base-goerli": BLOCK_EXPLORER_API_KEYS.baseScan,
       "eth-goerli": BLOCK_EXPLORER_API_KEYS.etherScan,
       "optimism-goerli": BLOCK_EXPLORER_API_KEYS.optimistic,
