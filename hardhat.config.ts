@@ -73,6 +73,11 @@ const hardhatUserConfig: HardhatUserConfig = {
       chainId: 56,
       url: `${SUPERFLUD_RPC_HOST}/bsc-mainnet`,
     },
+    "celo-mainnet": {
+      accounts,
+      chainId: 42220,
+      url: `${SUPERFLUD_RPC_HOST}/celo-mainnet`,
+    },
     "eth-mainnet": {
       accounts,
       chainId: 1,
