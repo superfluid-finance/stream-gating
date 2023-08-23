@@ -46,6 +46,11 @@ jobs:
         run: yarn compile
       - name: Deploy
         run: yarn deploy --network ${{matrix.networks}}
+
+  commit_and_push:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Update Deployments
