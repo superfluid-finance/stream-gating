@@ -165,7 +165,7 @@ const hardhatUserConfig: HardhatUserConfig = {
       bsc: BLOCK_EXPLORER_API_KEYS.bscScan,
       celo: BLOCK_EXPLORER_API_KEYS.celoScan,
       mainnet: BLOCK_EXPLORER_API_KEYS.etherScan,
-      "xdai-mainnet": BLOCK_EXPLORER_API_KEYS.gnosisScan,
+      gnosis: BLOCK_EXPLORER_API_KEYS.gnosisScan,
       optimisticEthereum: BLOCK_EXPLORER_API_KEYS.optimistic,
       polygon: BLOCK_EXPLORER_API_KEYS.polygonScan,
       // testnets
