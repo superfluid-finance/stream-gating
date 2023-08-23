@@ -102,7 +102,7 @@ const hardhatUserConfig: HardhatUserConfig = {
     // testnets
     "arbitrum-goerli": {
       accounts,
-      chainId: 421611,
+      chainId: 421613,
       url: `${SUPERFLUD_RPC_HOST}/arbitrum-goerli`,
     },
     "avalanche-fuji": {
@@ -114,6 +114,7 @@ const hardhatUserConfig: HardhatUserConfig = {
       accounts,
       chainId: 84531,
       url: "https://goerli.base.org", //`${SUPERFLUD_RPC_HOST}/base-goerli`,
+      gasPrice: 1000000000,
     },
     "eth-goerli": {
       accounts,
@@ -132,7 +133,7 @@ const hardhatUserConfig: HardhatUserConfig = {
     },
     "polygon-zkevm-testnet": {
       accounts,
-      chainId: 1101,
+      chainId: 1442,
       url: `${SUPERFLUD_RPC_HOST}/polygon-zkevm-testnet`,
     },
     "eth-sepolia": {
@@ -188,10 +189,10 @@ const hardhatUserConfig: HardhatUserConfig = {
       },
       {
         network: "polygon-zkevm-testnet",
-        chainId: 1101,
+        chainId: 1442,
         urls: {
-          apiURL: "https://api-zkevm.polygonscan.com/api",
-          browserURL: "https://zkevm.polygonscan.com",
+          apiURL: "https://api-testnet-zkevm.polygonscan.com/api",
+          browserURL: "https://testnet-zkevm.polygonscan.com",
         },
       },
     ],
