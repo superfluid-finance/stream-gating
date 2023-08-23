@@ -171,26 +171,24 @@ const hardhatUserConfig: HardhatUserConfig = {
       "polygon-zkevm-testnet": BLOCK_EXPLORER_API_KEYS.polygonScan,
       "eth-sepolia": BLOCK_EXPLORER_API_KEYS.etherScan,
     },
-    // customChains: [
-    //   {
-    //     network: "avalanche-c",
-    //     chainId: 43114,
-    //     urls: {
-    //       apiURL:
-    //         "https://api.avascan.info/v2/network/mainnet/evm/43114/etherscan",
-    //       browserURL: "https://avascan.info/blockchain/c",
-    //     },
-    //   },
-    //   {
-    //     network: "avalanche-fuji",
-    //     chainId: 43113,
-    //     urls: {
-    //       apiURL:
-    //         "https://api.avascan.info/v2/network/testnet/evm/43113/etherscan",
-    //       browserURL: "https://testnet.avascan.info/blockchain/fuji",
-    //     },
-    //   },
-    // ],
+    customChains: [
+      {
+        network: "base-mainnet",
+        chainId: 8453,
+        urls: {
+          apiURL: "https://api.basescan.org/api",
+          browserURL: "https://basescan.org",
+        },
+      },
+      {
+        network: "base-goerli",
+        chainId: 84531,
+        urls: {
+          apiURL: "https://api-goerli.basescan.org/api",
+          browserURL: "https://goerli.basescan.org",
+        },
+      },
+    ],
   },
   gasReporter: {
     enabled: true,
