@@ -13,8 +13,7 @@ const CONTRACT_NAME = "ExistentialNFTCloneFactory";
 const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { getNamedAccounts, deployments, network } = hre;
   const { deploy, log } = deployments;
-  const { deployer } = await getNamedAccounts();
-  const signer = await ethers.getSigner(deployer);
+  const [signer] = await ethers.getSigners();
 
   log(`Deploying ${CONTRACT_NAME} and waiting for confirmations...`);
 
@@ -25,7 +24,7 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const args: any = [existentialNFTDeployment.address];
 
   const existentialNFTCloneFactory = await deploy(CONTRACT_NAME, {
-    from: deployer,
+    from: signer.address,
     args,
     log: true,
     waitConfirmations: developmentChains.includes(network.name) ? 1 : 5,

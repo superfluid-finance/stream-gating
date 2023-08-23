@@ -1,19 +1,41 @@
-name: Deploy Contracts
+name: Deploy Contracts to Production Networks
 
 on:
   workflow_dispatch:
 env:
   MNEMONIC: ${{secrets.BUILD_AGENT_MNEMONIC}}
-  POLYGON_MUMBAI_RPC_URL: ${{secrets.POLYGON_MUMBAI_PROVIDER_URL}}
-  
+  SUPERFLUID_RPC_HOST: ${{secrets.SUPERFLUID_RPC_HOST}}
+  ARBISCAN_API_KEY: ${{secrets.ARBISCAN_API_KEY}}
+  SNOWTRACE_API_KEY: ${{secrets.SNOWTRACE_API_KEY}}
+  BASESCAN_API_KEY: ${{secrets.BASESCAN_API_KEY}}
+  BSCSCAN_API_KEY: ${{secrets.BSCSCAN_API_KEY}}
+  CELOSCAN_API_KEY: ${{secrets.CELOSCAN_API_KEY}}
+  ETHERSCAN_API_KEY: ${{secrets.ETHERSCAN_API_KEY}}
+  GNOSISSCAN_API_KEY: ${{secrets.GNOSISSCAN_API_KEY}}
+  OPTIMISTIC_API_KEY: ${{secrets.OPTIMISTIC_API_KEY}}
+  POLYGONSCAN_API_KEY: ${{secrets.POLYGONSCAN_API_KEY}}
+
+permissions:
+  contents: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    strategy: 
+    strategy:
       matrix:
-        networks: ["mumbai"] #[ "avalanche-c", "arbitrum-one", "base-mainnet", "bsc-mainnet", "eth-mainnet", "eth-goerli", "xdai-mainnet", "optimism-mainnet", "polygon-mainnet", "polygon-mumbai"]
+        networks:
+          [
+            "arbitrum-one",
+            "avalanche-c",
+            "base-mainnet",
+            "bsc-mainnet",
+            "celo-mainnet",
+            "optimism-mainnet",
+            "polygon-mainnet",
+            "xdai-mainnet",
+          ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install node
         uses: actions/setup-node@v1
         with:
@@ -24,3 +46,6 @@ jobs:
         run: yarn compile
       - name: Deploy
         run: yarn deploy --network ${{matrix.networks}}
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Update Deployments
