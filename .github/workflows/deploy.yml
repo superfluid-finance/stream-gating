@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        networks: ["avalanche-c"] # ["arbitrum-one", "polygon-mainnet", "polygon-mumbai"]
+        networks: ["avalanche-c"] # ["arbitrum-one", "polygon-mainnet"]
     steps:
       - uses: actions/checkout@v3
       - name: Install node
