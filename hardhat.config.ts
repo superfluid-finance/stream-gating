@@ -12,7 +12,7 @@ const SUPERFLUD_RPC_HOST = process.env.SUPERFLUID_RPC_HOST || "";
 
 const BLOCK_EXPLORER_API_KEYS = {
   arbiScan: process.env.ARBISCAN_API_KEY || "",
-  avaScan: process.env.AVASCAN_API_KEY || "",
+  // avaScan: process.env.AVASCAN_API_KEY || "",
   baseScan: process.env.BASESCAN_API_KEY || "",
   bscScan: process.env.BSCSCAN_API_KEY || "",
   celoScan: process.env.CELOSCAN_API_KEY || "",
@@ -152,7 +152,7 @@ const hardhatUserConfig: HardhatUserConfig = {
     apiKey: {
       // mainnets
       "arbitrum-one": BLOCK_EXPLORER_API_KEYS.arbiScan,
-      "avalanche-c": BLOCK_EXPLORER_API_KEYS.avaScan,
+      "avalanche-c": "avascan",
       "base-mainnet": BLOCK_EXPLORER_API_KEYS.baseScan,
       "bsc-mainnet": BLOCK_EXPLORER_API_KEYS.bscScan,
       "celo-mainnet": BLOCK_EXPLORER_API_KEYS.celoScan,
@@ -162,7 +162,7 @@ const hardhatUserConfig: HardhatUserConfig = {
       "polygon-mainnet": BLOCK_EXPLORER_API_KEYS.polygonScan,
       // testnets
       "arbitrum-goerli": BLOCK_EXPLORER_API_KEYS.arbiScan,
-      "avalanche-fuji": BLOCK_EXPLORER_API_KEYS.avaScan,
+      "avalanche-fuji": "avascan",
       "base-goerli": BLOCK_EXPLORER_API_KEYS.baseScan,
       "eth-goerli": BLOCK_EXPLORER_API_KEYS.etherScan,
       "optimism-goerli": BLOCK_EXPLORER_API_KEYS.optimistic,
@@ -170,6 +170,26 @@ const hardhatUserConfig: HardhatUserConfig = {
       "polygon-zkevm-testnet": BLOCK_EXPLORER_API_KEYS.polygonScan,
       "eth-sepolia": BLOCK_EXPLORER_API_KEYS.etherScan,
     },
+    customChains: [
+      {
+        network: "avalanche-c",
+        chainId: 43114,
+        urls: {
+          apiURL:
+            "https://api.avascan.info/v2/network/mainnet/evm/43114/etherscan",
+          browserURL: "https://avascan.info",
+        },
+      },
+      {
+        network: "avalanche-fuji",
+        chainId: 43113,
+        urls: {
+          apiURL:
+            "https://api.avascan.info/v2/network/testnet/evm/43113/etherscan",
+          browserURL: "https://testnet.avascan.info",
+        },
+      },
+    ],
   },
   gasReporter: {
     enabled: true,
