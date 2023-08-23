@@ -7,6 +7,8 @@ on:
   pull_request:
     branches:
       - "*"
+env:
+  RPC_FORK_URL: ${{secrets.RPC_FORK_URL}}
 
 concurrency:
   group: ${{github.workflow}}-${{github.ref}}
@@ -31,6 +33,4 @@ jobs:
       - name: Compile
         run: yarn compile
       - name: Run tests
-        run: yarn test
-        env:
-          POLYGON_MUMBAI_RPC_URL: ${{ env.rpc }}
+        run: yarn coverage

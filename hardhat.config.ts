@@ -8,6 +8,7 @@ import { ethers } from "ethers";
 config();
 
 const SUPERFLUD_RPC_HOST = process.env.SUPERFLUID_RPC_HOST || "";
+const RPC_FORK_URL = process.env.RPC_FORK_URL || "";
 
 const BLOCK_EXPLORER_API_KEYS = {
   arbiScan: process.env.ARBISCAN_API_KEY || "",
@@ -146,7 +147,7 @@ const hardhatUserConfig: HardhatUserConfig = {
     hardhat: {
       chainId: 31337,
       forking: {
-        url: `${SUPERFLUD_RPC_HOST}/polygon-mumbai`,
+        url: RPC_FORK_URL,
         enabled: true,
       },
     },
