@@ -4,7 +4,6 @@ import "@nomicfoundation/hardhat-toolbox";
 import "hardhat-deploy";
 import "hardhat-dependency-compiler";
 import { ethers } from "ethers";
-import metadata from "@superfluid-finance/metadata";
 
 config();
 
@@ -25,12 +24,13 @@ const BLOCK_EXPLORER_API_KEYS = {
 const MNEMONIC =
   process.env.MNEMONIC ||
   "test test test test test test test test test test test junk";
-const PRIVATE_KEY =
-  process.env.PRIVATE_KEY || ethers.Wallet.createRandom().privateKey;
+const PRIVATE_KEY = MNEMONIC
+  ? ethers.Wallet.fromPhrase(MNEMONIC).privateKey
+  : ethers.Wallet.createRandom().privateKey;
 
 const accounts = {
   mnemonic: MNEMONIC,
-  count: 20,
+  count: 1,
   initialIndex: 0,
   path: "m/44'/60'/0'/0",
   passphrase: "",
@@ -120,6 +120,7 @@ const hardhatUserConfig: HardhatUserConfig = {
       url: `${SUPERFLUD_RPC_HOST}/optimism-goerli`,
     },
     "polygon-mumbai": {
+      accounts,
       chainId: 80001,
       url: `${SUPERFLUD_RPC_HOST}/polygon-mumbai`,
     },
@@ -151,22 +152,22 @@ const hardhatUserConfig: HardhatUserConfig = {
   etherscan: {
     apiKey: {
       // mainnets
-      "arbitrum-one": BLOCK_EXPLORER_API_KEYS.arbiScan,
+      arbitrumOne: BLOCK_EXPLORER_API_KEYS.arbiScan,
       "avalanche-c": "avascan",
       "base-mainnet": BLOCK_EXPLORER_API_KEYS.baseScan,
-      "bsc-mainnet": BLOCK_EXPLORER_API_KEYS.bscScan,
+      bscMainnet: BLOCK_EXPLORER_API_KEYS.bscScan,
       "celo-mainnet": BLOCK_EXPLORER_API_KEYS.celoScan,
-      "eth-mainnet": BLOCK_EXPLORER_API_KEYS.etherScan,
+      mainnet: BLOCK_EXPLORER_API_KEYS.etherScan,
       "xdai-mainnet": BLOCK_EXPLORER_API_KEYS.gnosisScan,
-      "optimism-mainnet": BLOCK_EXPLORER_API_KEYS.optimistic,
-      "polygon-mainnet": BLOCK_EXPLORER_API_KEYS.polygonScan,
+      optimisticEthereum: BLOCK_EXPLORER_API_KEYS.optimistic,
+      polygon: BLOCK_EXPLORER_API_KEYS.polygonScan,
       // testnets
       "arbitrum-goerli": BLOCK_EXPLORER_API_KEYS.arbiScan,
       "avalanche-fuji": "avascan",
       "base-goerli": BLOCK_EXPLORER_API_KEYS.baseScan,
       "eth-goerli": BLOCK_EXPLORER_API_KEYS.etherScan,
       "optimism-goerli": BLOCK_EXPLORER_API_KEYS.optimistic,
-      "polygon-mumbai": BLOCK_EXPLORER_API_KEYS.polygonScan,
+      polygonMumbai: BLOCK_EXPLORER_API_KEYS.polygonScan,
       "polygon-zkevm-testnet": BLOCK_EXPLORER_API_KEYS.polygonScan,
       "eth-sepolia": BLOCK_EXPLORER_API_KEYS.etherScan,
     },

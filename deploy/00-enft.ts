@@ -8,7 +8,7 @@ import { ethers } from "hardhat";
 const CONTRACT_NAME = "ExistentialNFT";
 
 const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
-  const { getNamedAccounts, deployments, network } = hre;
+  const { getNamedAccounts, getUnnamedAccounts, deployments, network } = hre;
   const { deploy, log } = deployments;
   const { deployer } = await getNamedAccounts();
 
