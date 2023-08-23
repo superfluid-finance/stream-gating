@@ -156,7 +156,7 @@ const hardhatUserConfig: HardhatUserConfig = {
       avalanche: BLOCK_EXPLORER_API_KEYS.snowTrace,
       "base-mainnet": BLOCK_EXPLORER_API_KEYS.baseScan,
       bsc: BLOCK_EXPLORER_API_KEYS.bscScan,
-      "celo-mainnet": BLOCK_EXPLORER_API_KEYS.celoScan,
+      celo: BLOCK_EXPLORER_API_KEYS.celoScan,
       mainnet: BLOCK_EXPLORER_API_KEYS.etherScan,
       "xdai-mainnet": BLOCK_EXPLORER_API_KEYS.gnosisScan,
       optimisticEthereum: BLOCK_EXPLORER_API_KEYS.optimistic,
