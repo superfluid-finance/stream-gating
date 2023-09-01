@@ -162,6 +162,12 @@ contract ExistentialNFT is ERC721Upgradeable {
         }
     }
 
+    /**
+     * @notice construct the tokenURI for an owner
+     * @param owner -  the address of the owner
+     * @dev add dynamic queryparamaters at the end of the baseURI.
+     * @return tokenURI - the tokenURI for the owner
+     */
     function constructTokenURI(
         address owner
     ) private view returns (string memory) {
