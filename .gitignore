@@ -4,9 +4,9 @@ coverage
 coverage.json
 typechain
 typechain-types
+.DS_Store
 
 # Hardhat files
 deployments/localhost
 cache
 artifacts
-
