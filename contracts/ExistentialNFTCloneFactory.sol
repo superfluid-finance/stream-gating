@@ -24,7 +24,7 @@ contract ExistentialNFTCloneFactory {
         int96[] memory requiredFlowRates,
         string memory name,
         string memory symbol,
-        string memory tokenURI
+        string memory baseURI
     ) external {
         if (
             !(incomingFlowTokens.length > 0 &&
@@ -44,7 +44,7 @@ contract ExistentialNFTCloneFactory {
             requiredFlowRates,
             name,
             symbol,
-            tokenURI
+            baseURI
         );
     }
 }

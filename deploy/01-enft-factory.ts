@@ -4,8 +4,7 @@ import verify from "../utils/verify";
 import networkConfig, { developmentChains } from "../helper-hardhat.config";
 import { ExistentialNFTCloneFactory__factory } from "../typechain-types";
 import { ethers } from "hardhat";
-import fs from "fs";
-import path from "path";
+
 import hardhatUserConfig from "../hardhat.config";
 
 const CONTRACT_NAME = "ExistentialNFTCloneFactory";
@@ -52,7 +51,7 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
     if (rc) {
       process.env.EXISTENTIAL_NFT_CLONE_ADDRESS =
-        "0x0a34ce6675e827826cefdc8d4ca0723e18fbbfe3";
+        "0x4cbfad360e2652626906dae1dd774856e0ae47f9";
     }
   }
 

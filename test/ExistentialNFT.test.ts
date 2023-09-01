@@ -295,7 +295,10 @@ describe("ExistentialNFT", () => {
 
       const tokenURI = await enft.tokenURI(subscriber.address);
 
-      expect(tokenURI).to.equal(config.tokenURI);
+      const dynamicURIPart =
+        "&symbol=TST&token=0x42bb40bf79730451b11f6de1cba222f17b87afd7&sender=0x70997970c51812dc3a010c7d01b50e0d17dc79c8&recipient=0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266&flowrate=86400&clone=0x72861615a3ac520862f6cd9ec36682df452476e7";
+
+      expect(tokenURI).to.equal(config.tokenURI + dynamicURIPart);
     });
   });
 

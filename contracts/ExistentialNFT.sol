@@ -6,6 +6,7 @@ import {ERC721Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC72
 import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import {ISuperToken} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperToken.sol";
 import {SuperTokenV1Library} from "@superfluid-finance/ethereum-contracts/contracts/apps/SuperTokenV1Library.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 
 error ExistentialNFT_TransferIsNotAllowed();
 
@@ -22,9 +23,11 @@ struct PaymentOption {
  */
 contract ExistentialNFT is ERC721Upgradeable {
     using SuperTokenV1Library for ISuperToken;
+    using Strings for address;
+    using Strings for int96;
 
     PaymentOption[] private paymentOptions;
-    string private _tokenURI;
+    string private baseURI;
 
     /**
      * @notice Initializes the contract setting the given PaymentOptions
@@ -36,7 +39,7 @@ contract ExistentialNFT is ERC721Upgradeable {
         int96[] memory requiredFlowRates,
         string memory name,
         string memory symbol,
-        string memory globalTokenURI
+        string memory _baseURI
     ) public initializer {
         __ERC721_init(name, symbol);
 
@@ -49,7 +52,7 @@ contract ExistentialNFT is ERC721Upgradeable {
                 )
             );
 
-            _tokenURI = globalTokenURI;
+            baseURI = _baseURI;
         }
     }
 
@@ -75,7 +78,7 @@ contract ExistentialNFT is ERC721Upgradeable {
     ) public view override returns (string memory) {
         address owner = address(uint160(tokenId));
 
-        return balanceOf(owner) == 0 ? "" : _tokenURI;
+        return balanceOf(owner) == 0 ? "" : constructTokenURI(owner);
     }
 
     /**
@@ -157,5 +160,28 @@ contract ExistentialNFT is ERC721Upgradeable {
                 result = paymentOption;
             }
         }
+    }
+
+    function constructTokenURI(
+        address owner
+    ) private view returns (string memory) {
+        PaymentOption memory paymentOption = getPaymentOptionFor(owner);
+
+        return
+            string.concat(
+                baseURI,
+                "&symbol=",
+                symbol(),
+                "&token=",
+                address(paymentOption.incomingFlowToken).toHexString(),
+                "&sender=",
+                owner.toHexString(),
+                "&recipient=",
+                paymentOption.recipient.toHexString(),
+                "&flowrate=",
+                paymentOption.requiredFlowRate.toString(),
+                "&clone=",
+                address(this).toHexString()
+            );
     }
 }

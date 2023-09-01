@@ -39,7 +39,7 @@ const polygonMumbaiConfig: NetworkConfig = {
   tokenName: "Superfluid Test Mumbai NFT",
   tokenSymbol: "SFTF",
   tokenURI:
-    "https://pbs.twimg.com/profile_images/1572586531960885251/xhE0jcBi_400x400.png",
+    "https://sfnft.superfluid.finance/v1/existential/getmeta?name=SuperfluidTest&description=descriptionasdadasd&chain=80001&ipfs=QmQT4U5XydPoMMijaTFYeZ7D1kxG5Str3McKFB9UN6D7Fc",
 };
 
 const hardhatConfig: NetworkConfig = {
@@ -51,7 +51,8 @@ const hardhatConfig: NetworkConfig = {
   ],
   tokenName: "Test NFT",
   tokenSymbol: "TST",
-  tokenURI: "https://ipfs.io/someIPFSHash",
+  tokenURI:
+    "https://sfnft.superfluid.finance/v1/existential/getmeta?name=SuperfluidTest&description=descriptionasdadasd&chain=31337&ipfs=QmQT4U5XydPoMMijaTFYeZ7D1kxG5Str3McKFB9UN6D7Fc",
 };
 
 const networks: Record<number, NetworkConfig> = {
