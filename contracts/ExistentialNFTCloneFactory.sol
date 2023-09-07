@@ -13,7 +13,10 @@ contract ExistentialNFTCloneFactory is Ownable {
 
     address public implementation;
 
-    event ExistentialNFT_CloneDeployed(address indexed clone);
+    event ExistentialNFTCloneFactory_CloneDeployed(address indexed clone);
+    event ExistentialNFTCloneFactory_ImplementationUpdated(
+        address indexed implementation
+    );
 
     constructor(address _implementation) Ownable() {
         implementation = _implementation;
@@ -37,7 +40,7 @@ contract ExistentialNFTCloneFactory is Ownable {
 
         ExistentialNFT clone = ExistentialNFT(implementation.clone());
 
-        emit ExistentialNFT_CloneDeployed(address(clone));
+        emit ExistentialNFTCloneFactory_CloneDeployed(address(clone));
 
         clone.initialize(
             incomingFlowTokens,
@@ -51,5 +54,7 @@ contract ExistentialNFTCloneFactory is Ownable {
 
     function updateImplementation(address _implementation) external onlyOwner {
         implementation = _implementation;
+
+        emit ExistentialNFTCloneFactory_ImplementationUpdated(_implementation);
     }
 }

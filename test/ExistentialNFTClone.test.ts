@@ -59,6 +59,13 @@ describe("ExistentialNFTCloneFactory", () => {
 
       expect(implementation).to.equal(ZeroAddress);
     });
+
+    it("should emit event when implementation has changed", async () => {
+      await expect(enftCloneFactory.updateImplementation(ZeroAddress)).to.emit(
+        enftCloneFactory,
+        "ExistentialNFTCloneFactory_ImplementationUpdated"
+      );
+    });
   });
 
   describe("Test if ExistentialNFTClone supports the interface", () => {
@@ -102,6 +109,22 @@ describe("ExistentialNFTCloneFactory", () => {
       ).to.be.revertedWithCustomError(
         enftCloneFactory,
         "ExistentialNFTCloneFactory_ArgumentLengthMismatch"
+      );
+    });
+
+    it("emit event when a clone is deployed ", async () => {
+      const initArgs: any = [
+        config.superTokens.map(({ address }) => address),
+        config.recipients,
+        config.requiredFlowRates,
+        config.tokenName,
+        config.tokenSymbol,
+        config.tokenURI,
+      ];
+
+      await expect(enftCloneFactory.deployClone(...initArgs)).to.emit(
+        enftCloneFactory,
+        "ExistentialNFTCloneFactory_CloneDeployed"
       );
     });
   });
