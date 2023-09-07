@@ -3,18 +3,19 @@ pragma solidity ^0.8.19;
 
 import {Clones} from "@openzeppelin/contracts/proxy/Clones.sol";
 import {ISuperToken} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperToken.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {ExistentialNFT} from "./ExistentialNFT.sol";
 
 error ExistentialNFTCloneFactory_ArgumentLengthMismatch();
 
-contract ExistentialNFTCloneFactory {
+contract ExistentialNFTCloneFactory is Ownable {
     using Clones for address;
 
-    address public immutable implementation;
+    address public implementation;
 
     event ExistentialNFT_CloneDeployed(address indexed clone);
 
-    constructor(address _implementation) {
+    constructor(address _implementation) Ownable() {
         implementation = _implementation;
     }
 
@@ -46,5 +47,9 @@ contract ExistentialNFTCloneFactory {
             symbol,
             baseURI
         );
+    }
+
+    function updateImplementation(address _implementation) external onlyOwner {
+        implementation = _implementation;
     }
 }

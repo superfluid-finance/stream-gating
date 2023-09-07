@@ -9,6 +9,8 @@ import {SuperTokenV1Library} from "@superfluid-finance/ethereum-contracts/contra
 import "@openzeppelin/contracts/utils/Strings.sol";
 
 error ExistentialNFT_TransferIsNotAllowed();
+error ExistentialNFT_Unauthorized();
+error ExistentialNFT_Deprecated(uint256 at);
 
 struct PaymentOption {
     ISuperToken incomingFlowToken;
@@ -28,6 +30,14 @@ contract ExistentialNFT is ERC721Upgradeable {
 
     PaymentOption[] private paymentOptions;
     string private baseURI;
+    uint256 private deprecatedAfter;
+
+    modifier onlyMerchant() {
+        if (msg.sender != paymentOptions[0].recipient) {
+            revert ExistentialNFT_Unauthorized();
+        }
+        _;
+    }
 
     /**
      * @notice Initializes the contract setting the given PaymentOptions
@@ -56,12 +66,36 @@ contract ExistentialNFT is ERC721Upgradeable {
         }
     }
 
+    function addPaymentOption(
+        ISuperToken incomingFlowToken,
+        address recipient,
+        int96 requiredFlowRate
+    ) public onlyMerchant {
+        paymentOptions.push(
+            PaymentOption(incomingFlowToken, recipient, requiredFlowRate)
+        );
+    }
+
+    /**
+     * @notice set a time, after which the NFT is considered deprecated
+     * 0 means the NFT is never deprecated
+     * @dev only the recipient of the first PaymentOption can call this function
+     * @param timestamp - the timestamp after which the NFT is deprecated
+     */
+    function setDeprecatedAfter(uint256 timestamp) public onlyMerchant {
+        deprecatedAfter = timestamp;
+    }
+
     /**
      * @notice Overridden balanceOf, returning a value depending on the flow rate of the owner
      * @dev See {IERC721-balanceOf}.
      * @return 1 if the owner has a positive flow rate, 0 otherwise
      */
     function balanceOf(address owner) public view override returns (uint256) {
+        if (isDeprecated()) {
+            return 0;
+        }
+
         PaymentOption memory paymentOption = getPaymentOptionFor(owner);
 
         return paymentOption.requiredFlowRate > 0 ? 1 : 0;
@@ -76,6 +110,10 @@ contract ExistentialNFT is ERC721Upgradeable {
     function tokenURI(
         uint256 tokenId
     ) public view override returns (string memory) {
+        if (isDeprecated()) {
+            return "";
+        }
+
         address owner = address(uint160(tokenId));
 
         return balanceOf(owner) == 0 ? "" : constructTokenURI(owner);
@@ -87,6 +125,10 @@ contract ExistentialNFT is ERC721Upgradeable {
      * @return @param owner - if they have a positive flow rate, otherwise zero address
      */
     function ownerOf(uint256 tokenId) public view override returns (address) {
+        if (isDeprecated()) {
+            return address(0);
+        }
+
         address owner = address(uint160(tokenId));
 
         return balanceOf(owner) == 1 ? owner : address(0);
@@ -99,6 +141,10 @@ contract ExistentialNFT is ERC721Upgradeable {
      * @return tokenId - the address converted to uint256, 0 if the owner has no positive flow rate
      */
     function tokenOf(address owner) public view returns (uint256) {
+        if (isDeprecated()) {
+            return 0;
+        }
+
         return balanceOf(owner) == 1 ? uint256(uint160(owner)) : 0;
     }
 
@@ -149,6 +195,10 @@ contract ExistentialNFT is ERC721Upgradeable {
     function getPaymentOptionFor(
         address owner
     ) public view returns (PaymentOption memory result) {
+        if (isDeprecated()) {
+            return result;
+        }
+
         for (uint256 i = 0; i < paymentOptions.length; i++) {
             PaymentOption memory paymentOption = paymentOptions[i];
             int96 flowRate = paymentOption.incomingFlowToken.getFlowRate(
@@ -160,6 +210,13 @@ contract ExistentialNFT is ERC721Upgradeable {
                 result = paymentOption;
             }
         }
+    }
+
+    /**
+     * @notice Check if the NFT is considered deprecated
+     */
+    function isDeprecated() public view returns (bool) {
+        return deprecatedAfter > 0 && block.timestamp > deprecatedAfter;
     }
 
     /**

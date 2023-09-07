@@ -8,12 +8,16 @@ import {
 import { deployments, ethers, network } from "hardhat";
 import { expect } from "chai";
 import networks, { NetworkConfig } from "../helper-hardhat.config";
+import exp from "constants";
+import { ZeroAddress } from "ethers";
+import { Deployment } from "hardhat-deploy/types";
 
 describe("ExistentialNFTCloneFactory", () => {
   let accounts: SignerWithAddress[],
     deployer: SignerWithAddress,
     enft: ExistentialNFT,
     enftCloneFactory: ExistentialNFTCloneFactory,
+    enftImplementation: Deployment,
     config: NetworkConfig;
   beforeEach(async () => {
     accounts = await ethers.getSigners();
@@ -28,6 +32,8 @@ describe("ExistentialNFTCloneFactory", () => {
       "ExistentialNFTCloneFactory"
     );
 
+    enftImplementation = await deployments.get("ExistentialNFT");
+
     config = networks[network.config.chainId!] as NetworkConfig;
 
     enft = ExistentialNFT__factory.connect(
@@ -39,6 +45,20 @@ describe("ExistentialNFTCloneFactory", () => {
       existentialNFTDeployment.address,
       deployer
     );
+  });
+
+  describe("updateImplementation", () => {
+    it("should be able to update the implementation", async () => {
+      let implementation = await enftCloneFactory.implementation();
+
+      expect(implementation).to.equal(await enftImplementation.address);
+
+      await enftCloneFactory.updateImplementation(ZeroAddress);
+
+      implementation = await enftCloneFactory.implementation();
+
+      expect(implementation).to.equal(ZeroAddress);
+    });
   });
 
   describe("Test if ExistentialNFTClone supports the interface", () => {

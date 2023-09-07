@@ -44,6 +44,63 @@ describe("ExistentialNFT", () => {
     );
   });
 
+  describe("isDeprecated", () => {
+    it("should return false", async () => {
+      const isDeprecated = await enft.isDeprecated();
+
+      expect(isDeprecated).to.equal(false);
+    });
+
+    it("should return true", async () => {
+      await enft.setDeprecatedAfter(1);
+      const isDeprecated = await enft.isDeprecated();
+
+      expect(isDeprecated).to.equal(true);
+    });
+  });
+
+  describe("setDeprecatedAfter", () => {
+    it("should not be able to call setDeprecatedAfter if not 0th recipient.", async () => {
+      await expect(
+        enft.connect(subscriber).setDeprecatedAfter(1)
+      ).to.be.revertedWithCustomError(enft, "ExistentialNFT_Unauthorized");
+    });
+  });
+
+  describe("addPaymentOption", () => {
+    it("should not be able to call addPaymentOption if not 0th recipient.", async () => {
+      await expect(
+        enft
+          .connect(subscriber)
+          .addPaymentOption(
+            ZeroAddress,
+            config.recipients[0],
+            config.requiredFlowRates[0]
+          )
+      ).to.be.revertedWithCustomError(enft, "ExistentialNFT_Unauthorized");
+    });
+
+    it("should be able add a new PaymentOption.", async () => {
+      const paymentOptions = await enft.getPaymentOptions();
+
+      await enft.addPaymentOption(
+        ZeroAddress,
+        config.recipients[0],
+        config.requiredFlowRates[0]
+      );
+
+      const newPaymentOptions = await enft.getPaymentOptions();
+
+      expect(newPaymentOptions.length).to.equal(paymentOptions.length + 1);
+
+      const newPaymentOption = newPaymentOptions[newPaymentOptions.length - 1];
+
+      expect(newPaymentOption[0]).to.equal(ZeroAddress);
+      expect(newPaymentOption[1]).to.equal(config.recipients[0]);
+      expect(newPaymentOption[2]).to.equal(config.requiredFlowRates[0]);
+    });
+  });
+
   describe("getPaymentOptions", () => {
     it("should return all paymentOptions configured in the contract", async () => {
       const [paymentOption1, paymentOption2] = await enft.getPaymentOptions();
@@ -207,6 +264,34 @@ describe("ExistentialNFT", () => {
 
       expect(balance).to.equal(1);
     });
+
+    it("balanceOf should return 0 if the stream exists, but the contract is deprecated.", async () => {
+      await mintWrapperSuperToken(config.superTokens[0], subscriber); // mint 100 fUSDCx
+
+      expect(await superToken.balanceOf(subscriber.address)).to.eq(
+        parseEther("100")
+      );
+
+      const tx = await cfaV1Forwarder.createFlow(
+        config.superTokens[0].address,
+        subscriber.address,
+        config.recipients[0],
+        config.requiredFlowRates[0],
+        "0x"
+      );
+
+      await tx.wait();
+
+      let balance = await enft.balanceOf(subscriber.address);
+
+      expect(balance).to.equal(1);
+
+      await enft.setDeprecatedAfter(1);
+
+      balance = await enft.balanceOf(subscriber.address);
+
+      expect(balance).to.equal(0);
+    });
   });
 
   describe("ownerOf", () => {
@@ -237,6 +322,34 @@ describe("ExistentialNFT", () => {
 
       expect(owner).to.equal(subscriber.address);
     });
+
+    it("should return address(0) if the stream exists, but the contract is deprecated", async () => {
+      await mintWrapperSuperToken(config.superTokens[0], subscriber); // mint 100 fUSDCx
+
+      expect(await superToken.balanceOf(subscriber.address)).to.eq(
+        parseEther("100")
+      );
+
+      const tx = await cfaV1Forwarder.createFlow(
+        config.superTokens[0].address,
+        subscriber.address,
+        config.recipients[0],
+        config.requiredFlowRates[0].toString(),
+        "0x"
+      );
+
+      await tx.wait();
+
+      let owner = await enft.ownerOf(subscriber.address);
+
+      expect(owner).to.equal(subscriber.address);
+
+      await enft.setDeprecatedAfter(1);
+
+      owner = await enft.ownerOf(subscriber.address);
+
+      expect(owner).to.equal(ZeroAddress);
+    });
   });
 
   describe("tokenOf", () => {
@@ -265,7 +378,35 @@ describe("ExistentialNFT", () => {
 
       const token = await enft.tokenOf(subscriber.address);
 
-      expect(token).to.equal(642829559307850963015472508762062935916233390536n); // yaddress as BigInt
+      expect(token).to.equal(642829559307850963015472508762062935916233390536n); // address as BigInt
+    });
+
+    it("should return 0 if the stream exists but the contract is deprecated.", async () => {
+      await mintWrapperSuperToken(config.superTokens[0], subscriber); // mint 100 fUSDCx
+
+      expect(await superToken.balanceOf(subscriber.address)).to.eq(
+        parseEther("100")
+      );
+
+      const tx = await cfaV1Forwarder.createFlow(
+        config.superTokens[0].address,
+        subscriber.address,
+        config.recipients[0],
+        config.requiredFlowRates[0].toString(),
+        "0x"
+      );
+
+      await tx.wait();
+
+      let token = await enft.tokenOf(subscriber.address);
+
+      expect(token).to.equal(642829559307850963015472508762062935916233390536n); // address as BigInt
+
+      await enft.setDeprecatedAfter(1);
+
+      token = await enft.tokenOf(subscriber.address);
+
+      expect(token).to.equal(0);
     });
   });
 
@@ -296,9 +437,40 @@ describe("ExistentialNFT", () => {
       const tokenURI = await enft.tokenURI(subscriber.address);
 
       const dynamicURIPart =
-        "&symbol=TST&token=0x42bb40bf79730451b11f6de1cba222f17b87afd7&sender=0x70997970c51812dc3a010c7d01b50e0d17dc79c8&recipient=0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266&flowrate=86400&clone=0x72861615a3ac520862f6cd9ec36682df452476e7";
+        "&symbol=TST&token=0x42bb40bf79730451b11f6de1cba222f17b87afd7&sender=0x70997970c51812dc3a010c7d01b50e0d17dc79c8&recipient=0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266&flowrate=86400&clone=0x1a1e2c37e0780f3acc0490f4241378ea95eebf79";
 
       expect(tokenURI).to.equal(config.tokenURI + dynamicURIPart);
+    });
+
+    it('should return "" if the stream exists, but the contract is deprecated', async () => {
+      await mintWrapperSuperToken(config.superTokens[0], subscriber); // mint 100 fUSDCx
+
+      expect(await superToken.balanceOf(subscriber.address)).to.eq(
+        parseEther("100")
+      );
+
+      const tx = await cfaV1Forwarder.createFlow(
+        config.superTokens[0].address,
+        subscriber.address,
+        config.recipients[0],
+        config.requiredFlowRates[0].toString(),
+        "0x"
+      );
+
+      await tx.wait();
+
+      let tokenURI = await enft.tokenURI(subscriber.address);
+
+      const dynamicURIPart =
+        "&symbol=TST&token=0x42bb40bf79730451b11f6de1cba222f17b87afd7&sender=0x70997970c51812dc3a010c7d01b50e0d17dc79c8&recipient=0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266&flowrate=86400&clone=0x1a1e2c37e0780f3acc0490f4241378ea95eebf79";
+
+      expect(tokenURI).to.equal(config.tokenURI + dynamicURIPart);
+
+      await enft.setDeprecatedAfter(1);
+
+      tokenURI = await enft.tokenURI(subscriber.address);
+
+      expect(tokenURI).to.equal("");
     });
   });
 
