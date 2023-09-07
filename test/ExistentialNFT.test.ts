@@ -126,6 +126,30 @@ describe("ExistentialNFT", () => {
       expect(paymentOption).to.deep.equal([ZeroAddress, ZeroAddress, 0n]);
     });
 
+    it("should return empty paymentOption if is a stream, but the contract is deprecated.", async () => {
+      await mintWrapperSuperToken(config.superTokens[0], subscriber); // mint 100 fUSDCx
+
+      const tx = await cfaV1Forwarder.createFlow(
+        config.superTokens[0].address,
+        subscriber.address,
+        config.recipients[0],
+        config.requiredFlowRates[0],
+        "0x"
+      );
+
+      await tx.wait();
+
+      let paymentOption = await enft.getPaymentOptionFor(subscriber.address);
+
+      expect(paymentOption[2]).to.equal(86400n);
+
+      await enft.setDeprecatedAfter(1);
+
+      paymentOption = await enft.getPaymentOptionFor(subscriber.address);
+
+      expect(paymentOption).to.deep.equal([ZeroAddress, ZeroAddress, 0n]);
+    });
+
     it("should return the appropriate paymentOption according to flowRate(86400)", async () => {
       await mintWrapperSuperToken(config.superTokens[0], subscriber); // mint 100 fUSDCx
       expect(await superToken.balanceOf(subscriber.address)).to.eq(
