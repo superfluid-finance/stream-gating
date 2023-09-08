@@ -77,10 +77,10 @@ contract ExistentialNFT is ERC721Upgradeable {
     }
 
     /**
-     * @notice set a time, after which the NFT is considered deprecated
+     * @notice set a time, after which subscriptions are considered deprecated
      * 0 means the NFT is never deprecated
      * @dev only the recipient of the first PaymentOption can call this function
-     * @param timestamp - the timestamp after which the NFT is deprecated
+     * @param timestamp - the timestamp after which subscriptions are deprecated
      */
     function setDeprecatedAfter(uint256 timestamp) public onlyMerchant {
         deprecatedAfter = timestamp;
@@ -113,7 +113,7 @@ contract ExistentialNFT is ERC721Upgradeable {
      * @notice Overridden tokenURI, returning the URI set at deployment
      * @param tokenId - is the address of the owner
      * @dev See {IERC721-tokenURI}.
-     * @return tokenURI - the global URI of the NFT set at deployment
+     * @return tokenURI - the tokenURI for the owner
      */
     function tokenURI(
         uint256 tokenId
@@ -245,7 +245,7 @@ contract ExistentialNFT is ERC721Upgradeable {
     }
 
     /**
-     * @notice Check if the NFT is considered deprecated
+     * @notice Check if the flow is considered deprecated based on the lastUpdated value
      */
     function isDeprecated(uint256 flowLastUpdated) public view returns (bool) {
         return deprecatedAfter > 0 && flowLastUpdated > deprecatedAfter;
