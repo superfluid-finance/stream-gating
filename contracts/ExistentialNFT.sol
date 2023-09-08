@@ -35,7 +35,7 @@ contract ExistentialNFT is ERC721Upgradeable {
     /**
      * @notice Modifier that checks if the caller is the recipient of the first PaymentOption
      * @dev The 0th PaymentOption's recipient (considered the default)
-     *  is the only one that can add new PaymentOption
+     * is the only one that can add new PaymentOption
      */
     modifier onlyMerchant() {
         if (msg.sender != paymentOptions[0].recipient) {
