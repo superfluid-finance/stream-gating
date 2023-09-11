@@ -8,7 +8,6 @@ import {
 import { deployments, ethers, network } from "hardhat";
 import { expect } from "chai";
 import networks, { NetworkConfig } from "../helper-hardhat.config";
-import exp from "constants";
 import { ZeroAddress } from "ethers";
 import { Deployment } from "hardhat-deploy/types";
 
@@ -99,6 +98,7 @@ describe("ExistentialNFTCloneFactory", () => {
     it("should revert with ExistentialNFTCloneFactory_ArgumentLengthMismatch if arraysizes are mismatched", async () => {
       await expect(
         enftCloneFactory.deployClone(
+          deployer.address,
           config.superTokens.map(({ address }) => address),
           [],
           config.requiredFlowRates,
@@ -114,6 +114,7 @@ describe("ExistentialNFTCloneFactory", () => {
 
     it("emit event when a clone is deployed ", async () => {
       const initArgs: any = [
+        deployer.address,
         config.superTokens.map(({ address }) => address),
         config.recipients,
         config.requiredFlowRates,

@@ -62,15 +62,15 @@ describe("ExistentialNFT", () => {
   });
 
   describe("setDeprecatedAfter", () => {
-    it("should not be able to call setDeprecatedAfter if not 0th recipient.", async () => {
+    it("should not be able to call setDeprecatedAfter if not the owner.", async () => {
       await expect(
         enft.connect(subscriber).setDeprecatedAfter(1)
-      ).to.be.revertedWithCustomError(enft, "ExistentialNFT_Unauthorized");
+      ).to.be.revertedWith("Ownable: caller is not the owner");
     });
   });
 
   describe("addPaymentOption", () => {
-    it("should not be able to call addPaymentOption if not 0th recipient.", async () => {
+    it("should not be able to call addPaymentOption if not the owner.", async () => {
       await expect(
         enft
           .connect(subscriber)
@@ -79,7 +79,7 @@ describe("ExistentialNFT", () => {
             config.recipients[0],
             config.requiredFlowRates[0]
           )
-      ).to.be.revertedWithCustomError(enft, "ExistentialNFT_Unauthorized");
+      ).to.be.revertedWith("Ownable: caller is not the owner");
     });
 
     it("should be able add a new PaymentOption.", async () => {
@@ -104,12 +104,19 @@ describe("ExistentialNFT", () => {
   });
 
   describe("removePaymentOption", () => {
+    it("should not be able to call removePaymentOption if not the owner", async () => {
+      await expect(
+        enft.connect(subscriber).removePaymentOption(0)
+      ).to.be.revertedWith("Ownable: caller is not the owner");
+    });
+
     it("should revert if trying to access non-existant paymentOptions", async () => {
       await expect(enft.removePaymentOption(3)).to.be.revertedWithCustomError(
         enft,
         "ExistentialNFT_PaymentOptionIndexOutOfBounds"
       );
     });
+
     it("should be able to remove an existing paymentOption", async () => {
       const [_, paymentOptions] = await enft.getPaymentOptions();
 

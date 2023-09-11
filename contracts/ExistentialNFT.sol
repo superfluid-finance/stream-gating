@@ -3,13 +3,13 @@
 pragma solidity ^0.8.19;
 
 import {ERC721Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
+import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import {ISuperToken} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperToken.sol";
 import {SuperTokenV1Library} from "@superfluid-finance/ethereum-contracts/contracts/apps/SuperTokenV1Library.sol";
 import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 
 error ExistentialNFT_TransferIsNotAllowed();
-error ExistentialNFT_Unauthorized();
 error ExistentialNFT_Deprecated(uint256 at);
 error ExistentialNFT_PaymentOptionIndexOutOfBounds();
 
@@ -24,7 +24,7 @@ struct PaymentOption {
  * @notice Non-mintable NFT contract that is owned by a user as long as they have a positive flow rate
  * @dev Mirrors the Superfluid Checkout-Builder interface
  */
-contract ExistentialNFT is ERC721Upgradeable {
+contract ExistentialNFT is ERC721Upgradeable, OwnableUpgradeable {
     using SuperTokenV1Library for ISuperToken;
     using Strings for address;
     using Strings for int96;
@@ -34,22 +34,11 @@ contract ExistentialNFT is ERC721Upgradeable {
     uint256 private deprecatedAfter;
 
     /**
-     * @notice Modifier that checks if the caller is the recipient of the first PaymentOption
-     * @dev The 0th PaymentOption's recipient (considered the default)
-     * is the only one that can add new PaymentOption
-     */
-    modifier onlyMerchant() {
-        if (msg.sender != paymentOptions[0].recipient) {
-            revert ExistentialNFT_Unauthorized();
-        }
-        _;
-    }
-
-    /**
      * @notice Initializes the contract setting the given PaymentOptions
      * @dev Array parameters should be the same size.
      */
     function initialize(
+        address owner,
         ISuperToken[] memory incomingFlowTokens,
         address[] memory recipients,
         int96[] memory requiredFlowRates,
@@ -70,6 +59,9 @@ contract ExistentialNFT is ERC721Upgradeable {
 
             baseURI = _baseURI;
         }
+
+        __Ownable_init();
+        transferOwnership(owner);
     }
 
     /**
@@ -82,7 +74,7 @@ contract ExistentialNFT is ERC721Upgradeable {
         ISuperToken incomingFlowToken,
         address recipient,
         int96 requiredFlowRate
-    ) public onlyMerchant {
+    ) public onlyOwner {
         paymentOptions.push(
             PaymentOption(incomingFlowToken, recipient, requiredFlowRate)
         );
@@ -92,7 +84,7 @@ contract ExistentialNFT is ERC721Upgradeable {
      * @notice remove a PaymentOption from the list of PaymentOptions
      * @param index - the index of the PaymentOption to be removed
      */
-    function removePaymentOption(uint256 index) public onlyMerchant {
+    function removePaymentOption(uint256 index) public onlyOwner {
         if (index >= paymentOptions.length) {
             revert ExistentialNFT_PaymentOptionIndexOutOfBounds();
         }
@@ -110,7 +102,7 @@ contract ExistentialNFT is ERC721Upgradeable {
      * @dev only the recipient of the first PaymentOption can call this function
      * @param timestamp - the timestamp after which subscriptions are deprecated
      */
-    function setDeprecatedAfter(uint256 timestamp) public onlyMerchant {
+    function setDeprecatedAfter(uint256 timestamp) public onlyOwner {
         deprecatedAfter = timestamp;
     }
 

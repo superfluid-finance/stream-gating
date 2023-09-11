@@ -23,6 +23,7 @@ contract ExistentialNFTCloneFactory is Ownable {
     }
 
     function deployClone(
+        address owner,
         ISuperToken[] memory incomingFlowTokens,
         address[] memory recipients,
         int96[] memory requiredFlowRates,
@@ -43,6 +44,7 @@ contract ExistentialNFTCloneFactory is Ownable {
         emit ExistentialNFTCloneFactory_CloneDeployed(address(clone));
 
         clone.initialize(
+            owner,
             incomingFlowTokens,
             recipients,
             requiredFlowRates,

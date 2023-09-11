@@ -33,6 +33,7 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   if (developmentChains.includes(network.name)) {
     const initArgs: any = [
+      signer.address,
       config.superTokens.map(({ address }) => address),
       config.recipients,
       config.requiredFlowRates,
