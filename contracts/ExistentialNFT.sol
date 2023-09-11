@@ -65,7 +65,7 @@ contract ExistentialNFT is ERC721Upgradeable, OwnableUpgradeable {
     }
 
     /**
-     * @notice Overridden _baseURI, returning the baseURI set at deployment
+     * @notice add a new PaymentOption
      * @param incomingFlowToken - the address of the supertoken
      * @param recipient - the address of the recipient
      * @param requiredFlowRate - the required flow rate
@@ -81,7 +81,7 @@ contract ExistentialNFT is ERC721Upgradeable, OwnableUpgradeable {
     }
 
     /**
-     * @notice remove a PaymentOption from the list of PaymentOptions
+     * @notice remove an existing PaymentOption
      * @param index - the index of the PaymentOption to be removed
      */
     function removePaymentOption(uint256 index) public onlyOwner {
