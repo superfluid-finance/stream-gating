@@ -11,6 +11,7 @@ import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 error ExistentialNFT_TransferIsNotAllowed();
 error ExistentialNFT_Unauthorized();
 error ExistentialNFT_Deprecated(uint256 at);
+error ExistentialNFT_PaymentOptionIndexOutOfBounds();
 
 struct PaymentOption {
     ISuperToken incomingFlowToken;
@@ -71,6 +72,12 @@ contract ExistentialNFT is ERC721Upgradeable {
         }
     }
 
+    /**
+     * @notice Overridden _baseURI, returning the baseURI set at deployment
+     * @param incomingFlowToken - the address of the supertoken
+     * @param recipient - the address of the recipient
+     * @param requiredFlowRate - the required flow rate
+     */
     function addPaymentOption(
         ISuperToken incomingFlowToken,
         address recipient,
@@ -79,6 +86,22 @@ contract ExistentialNFT is ERC721Upgradeable {
         paymentOptions.push(
             PaymentOption(incomingFlowToken, recipient, requiredFlowRate)
         );
+    }
+
+    /**
+     * @notice remove a PaymentOption from the list of PaymentOptions
+     * @param index - the index of the PaymentOption to be removed
+     */
+    function removePaymentOption(uint256 index) public onlyMerchant {
+        if (index >= paymentOptions.length) {
+            revert ExistentialNFT_PaymentOptionIndexOutOfBounds();
+        }
+
+        for (uint256 i = index; i < paymentOptions.length - 1; i++) {
+            paymentOptions[i] = paymentOptions[i + 1];
+        }
+
+        paymentOptions.pop();
     }
 
     /**
