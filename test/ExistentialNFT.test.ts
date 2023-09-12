@@ -464,7 +464,7 @@ describe("ExistentialNFT", () => {
       const tokenURI = await enft.tokenURI(subscriber.address);
 
       const dynamicURIPart =
-        "&symbol=TST&token=0x42bb40bf79730451b11f6de1cba222f17b87afd7&sender=0x70997970c51812dc3a010c7d01b50e0d17dc79c8&recipient=0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266&flowrate=86400&clone=0x1fa68be6126bae66533c8c2d38402c22a9dd1f00";
+        "&symbol=TST&token=0x42bb40bf79730451b11f6de1cba222f17b87afd7&sender=0x70997970c51812dc3a010c7d01b50e0d17dc79c8&recipient=0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266&flowrate=86400&clone=0x390286d9fe81ec3fd4b310189d067b78fc542415";
 
       expect(tokenURI).to.equal(config.tokenURI + dynamicURIPart);
     });
@@ -489,7 +489,7 @@ describe("ExistentialNFT", () => {
       let tokenURI = await enft.tokenURI(subscriber.address);
 
       const dynamicURIPart =
-        "&symbol=TST&token=0x42bb40bf79730451b11f6de1cba222f17b87afd7&sender=0x70997970c51812dc3a010c7d01b50e0d17dc79c8&recipient=0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266&flowrate=86400&clone=0x1fa68be6126bae66533c8c2d38402c22a9dd1f00";
+        "&symbol=TST&token=0x42bb40bf79730451b11f6de1cba222f17b87afd7&sender=0x70997970c51812dc3a010c7d01b50e0d17dc79c8&recipient=0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266&flowrate=86400&clone=0x390286d9fe81ec3fd4b310189d067b78fc542415";
 
       expect(tokenURI).to.equal(config.tokenURI + dynamicURIPart);
 
