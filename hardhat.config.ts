@@ -163,7 +163,7 @@ const hardhatUserConfig: HardhatUserConfig = {
       // mainnets
       arbitrumOne: BLOCK_EXPLORER_API_KEYS.arbiScan,
       avalanche: BLOCK_EXPLORER_API_KEYS.snowTrace,
-      base: BLOCK_EXPLORER_API_KEYS.baseScan,
+      "base-mainnet": BLOCK_EXPLORER_API_KEYS.baseScan,
       bsc: BLOCK_EXPLORER_API_KEYS.bscScan,
       "celo-mainnet": BLOCK_EXPLORER_API_KEYS.celoScan,
       mainnet: BLOCK_EXPLORER_API_KEYS.etherScan,
@@ -195,6 +195,14 @@ const hardhatUserConfig: HardhatUserConfig = {
         urls: {
           apiURL: "https://api-testnet-zkevm.polygonscan.com/api",
           browserURL: "https://testnet-zkevm.polygonscan.com",
+        },
+      },
+      {
+        network: "base-mainnet",
+        chainId: 8453,
+        urls: {
+          apiURL: "https://api.basescan.org/api",
+          browserURL: "https://basescan.org",
         },
       },
     ],
