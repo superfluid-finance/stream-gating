@@ -52,7 +52,7 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
     if (rc) {
       process.env.EXISTENTIAL_NFT_CLONE_ADDRESS =
-        "0x390286d9fe81ec3fd4b310189d067b78fc542415";
+        "0x5ea7cf3d49f3ae3e40a07242ade58d35a9ce1916";
     }
   }
 
