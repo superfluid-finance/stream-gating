@@ -101,42 +101,15 @@ const hardhatUserConfig: HardhatUserConfig = {
       url: `${SUPERFLUD_RPC_HOST}/polygon-mainnet`,
     },
     // testnets
-    "arbitrum-goerli": {
-      accounts,
-      chainId: 421613,
-      url: `${SUPERFLUD_RPC_HOST}/arbitrum-goerli`,
-    },
     "avalanche-fuji": {
       accounts,
       chainId: 43113,
       url: `${SUPERFLUD_RPC_HOST}/avalanche-fuji`,
     },
-    "base-goerli": {
-      accounts,
-      chainId: 84531,
-      url: "https://goerli.base.org", //`${SUPERFLUD_RPC_HOST}/base-goerli`,
-      gasPrice: 1000000000,
-    },
-    "eth-goerli": {
-      accounts,
-      chainId: 5,
-      url: `${SUPERFLUD_RPC_HOST}/eth-goerli`,
-    },
-    "optimism-goerli": {
-      accounts,
-      chainId: 420,
-      url: `${SUPERFLUD_RPC_HOST}/optimism-goerli`,
-      gasPrice: 1000000000,
-    },
     "polygon-mumbai": {
       accounts,
       chainId: 80001,
       url: `${SUPERFLUD_RPC_HOST}/polygon-mumbai`,
-    },
-    "polygon-zkevm-testnet": {
-      accounts,
-      chainId: 1442,
-      url: `${SUPERFLUD_RPC_HOST}/polygon-zkevm-testnet`,
     },
     "eth-sepolia": {
       accounts,
@@ -171,11 +144,7 @@ const hardhatUserConfig: HardhatUserConfig = {
       optimisticEthereum: BLOCK_EXPLORER_API_KEYS.optimistic,
       polygon: BLOCK_EXPLORER_API_KEYS.polygonScan,
       // testnets
-      arbitrumGoerli: BLOCK_EXPLORER_API_KEYS.arbiScan,
       avalancheFujiTestnet: BLOCK_EXPLORER_API_KEYS.snowTrace,
-      baseGoerli: BLOCK_EXPLORER_API_KEYS.baseScan,
-      goerli: BLOCK_EXPLORER_API_KEYS.etherScan,
-      optimisticGoerli: BLOCK_EXPLORER_API_KEYS.optimistic,
       polygonMumbai: BLOCK_EXPLORER_API_KEYS.polygonScan,
       "polygon-zkevm-testnet": BLOCK_EXPLORER_API_KEYS.polygonScanZKEVM,
       sepolia: BLOCK_EXPLORER_API_KEYS.etherScan,
